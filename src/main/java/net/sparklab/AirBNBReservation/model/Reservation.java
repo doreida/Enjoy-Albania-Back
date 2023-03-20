@@ -28,7 +28,7 @@ public class Reservation extends BaseEntity{
     private Currency earning;
 
     @ManyToOne
-    @JoinColumn(name = "guest_id")
+    @JoinColumn(name = "guest_id",referencedColumnName = "id", nullable = false)
     private Guest guest;
 
 }

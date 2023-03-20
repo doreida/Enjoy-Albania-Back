@@ -21,6 +21,7 @@ public class Guest extends BaseEntity{
     private String contact;
     private Status status;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "guest")
+
     List<Reservation> reservations;
 }
