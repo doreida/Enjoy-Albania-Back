@@ -15,7 +15,7 @@ public class GuestToGuestDTO implements Converter<Guest, GuestDTO> {
             guestDTO.setId(source.getId());
             guestDTO.setFirstname(source.getFirstname());
             guestDTO.setLastname(source.getLastname());
-            guestDTO.setStatus(source.getStatus());
+            guestDTO.setStatus(source.getStatus().name());
             guestDTO.setContact(source.getContact());
             return guestDTO;
         }

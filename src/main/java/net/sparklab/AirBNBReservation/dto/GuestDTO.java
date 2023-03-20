@@ -13,7 +13,6 @@ public class GuestDTO {
     private String firstname;
     private String lastname;
     private String contact;
-    private Status status;
+    private String status;
 
-    private List<Reservation> reservations;
 }

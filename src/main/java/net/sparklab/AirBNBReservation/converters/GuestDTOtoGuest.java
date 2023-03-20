@@ -3,6 +3,7 @@ package net.sparklab.AirBNBReservation.converters;
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
+import net.sparklab.AirBNBReservation.utils.StatusUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +22,10 @@ public class GuestDTOtoGuest implements Converter<GuestDTO, Guest> {
             if(source.getId()!=null){
                 guest.setId(source.getId());
             }
-            guest.setFirstname(source.getFirstname()!=null ? source.getFirstname():guestRepository.findById(source.getId()).get().getFirstname());
-            guest.setLastname(source.getLastname()!= null ? source.getLastname():guestRepository.findById(source.getId()).get().getLastname());
-            guest.setStatus(source.getStatus()!= null ? source.getStatus():guestRepository.findById(source.getId()).get().getStatus());
-            guest.setContact(source.getContact()!=null ? source.getContact() : guestRepository.findById(source.getId()).get().getContact());
+            guest.setFirstname(source.getFirstname()!=null ? source.getFirstname():null);
+            guest.setLastname(source.getLastname()!= null ? source.getLastname():null);
+            guest.setStatus(source.getStatus()!= null ? StatusUtils.getStatus(source.getStatus()):null);
+            guest.setContact(source.getContact()!=null ? source.getContact() : null);
             return guest;
         }
         return null;
