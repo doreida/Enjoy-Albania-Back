@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Currency;
 
 @Entity
@@ -27,7 +26,9 @@ public class Reservation extends BaseEntity{
     private int noNights;
     private String listing;
     private Currency earning;
-//    @OneToMany(mappedBy = "guest")
-//    private Guest guest;
+
+    @ManyToOne
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
 
 }
