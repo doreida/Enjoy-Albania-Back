@@ -43,8 +43,8 @@ public class LogInService {
             System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtUtils.generateAccessToken(userRepository.findUsersByEmail(loginRequestDTO.getEmail()).get());
-            apiResponse.setAccessToken(token);
-          setUserData(userRepository.findUsersByEmail(loginRequestDTO.getEmail()).get(),token);
+            //apiResponse.setAccessToken(token);
+            apiResponse= setUserData(userRepository.findUsersByEmail(loginRequestDTO.getEmail()).get(),token);
 
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 

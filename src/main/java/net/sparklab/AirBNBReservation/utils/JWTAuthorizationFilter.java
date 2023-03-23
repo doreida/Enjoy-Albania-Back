@@ -28,8 +28,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().matches("/enjoyAlbania/auth(.*)")
-                || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth/forgotPassword(.*)")
-                || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth/resetPassword(.*)")
+//                || request.getServletPath().matches("/enjoyAlbania/guest(.*)")
+                || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth(.*)")
 
         ) {
             filterChain.doFilter(request, response);
