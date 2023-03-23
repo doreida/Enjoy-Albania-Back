@@ -1,10 +1,6 @@
 package net.sparklab.AirBNBReservation.services;
 
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvValidationException;
@@ -30,6 +26,7 @@ public class ReservationService {
     public final ReservationRepository reservationRepository;
     public final ReservationToReservationDTO toReservationDTO;
     public final ReservationDTOToReservation toReservation;
+
 
     public List<ReservationDTO> findAll(){
         return reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
@@ -57,33 +54,21 @@ public class ReservationService {
         return reservations;
     }
 
-//    public List<ReservationDTO> parseCsvFile(MultipartFile file) throws IOException, CsvValidationException {
-//        List<ReservationDTO> csvDataList = new ArrayList<>();
-//        InputStream inputStream = file.getInputStream();
-//        Reader reader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
-//
-//        CSVParser parser = new CSVParserBuilder()
-//                .withSeparator(',')
-//                .withIgnoreQuotations(true)
-//                .build();
-//        CSVReader csvReader = new CSVReaderBuilder(reader)
-//                .withCSVParser(parser)
-//                .build();
-//        String[] headers = csvReader.readNext(); // skip header row
-//        String[] row;
-//        while ((row = csvReader.readNext()) != null) {
-//
-//            String name = row[0];
-//            String currencyString = row[1].replaceAll("\\$", ""); // remove $ sign
-//            Currency currency = Currency.getInstance(currencyString);
-//            ReservationDTO csvData = new ReservationDTO();
-//
-//            csvDataList.add(csvData);
+//    public ResponseEntity<?> saveOrUpdate(ReservationDTO reservationDTO) {
+//        try {
+//            if (reservationRepository.existsByConfirmationCode(reservationDTO.getConfirmationCode()) && reservationDTO.getId() == null) {
+//                return new ResponseEntity<>("There is already a reservation with this confirmation code", HttpStatus.BAD_REQUEST);
+//            } else {
+//                reservationRepository.save(toReservation.convert(reservationDTO));
+//                return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
+//            }
 //        }
-//        return csvDataList;
+//             catch(NotValidFileException e){
+//                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//            }
+//
+//        catch(Exception e){
+//                return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
+//
 //    }
-
-
-
-
 }
