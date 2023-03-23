@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.dto.UploadDTO;
 import net.sparklab.AirBNBReservation.services.ReservationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,11 @@ public class ReservationController {
     public List<UploadDTO> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
         return reservationService.uploadData(file);
     }
+
+//    PostMapping
+//    public ResponseEntity<?> saveOrUpdate(@RequestBody ReservationDTO reservationDTO){
+//        return reservationService.saveOrUpdate(reservationDTO);
+//    }
 
 
 }

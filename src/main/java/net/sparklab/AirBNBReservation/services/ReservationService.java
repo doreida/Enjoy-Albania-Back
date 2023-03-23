@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.dto.UploadDTO;
+import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +27,7 @@ public class ReservationService {
 
     public final ReservationRepository reservationRepository;
     public final ReservationToReservationDTO toReservationDTO;
+
 
     public List<ReservationDTO> findAll(){
         return reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
@@ -50,4 +54,22 @@ public class ReservationService {
         inputStream.close();
         return reservations;
     }
+
+//    public ResponseEntity<?> saveOrUpdate(ReservationDTO reservationDTO) {
+//        try {
+//            if (reservationRepository.existsByConfirmationCode(reservationDTO.getConfirmationCode()) && reservationDTO.getId() == null) {
+//                return new ResponseEntity<>("There is already a reservation with this confirmation code", HttpStatus.BAD_REQUEST);
+//            } else {
+//                reservationRepository.save(toReservation.convert(reservationDTO));
+//                return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
+//            }
+//        }
+//             catch(NotValidFileException e){
+//                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//            }
+//
+//        catch(Exception e){
+//                return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
+//
+//    }
 }
