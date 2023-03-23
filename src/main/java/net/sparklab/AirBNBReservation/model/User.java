@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Users extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
 
     private String name;
