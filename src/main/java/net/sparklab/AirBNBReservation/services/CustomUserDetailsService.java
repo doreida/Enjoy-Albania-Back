@@ -8,20 +8,22 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-
-public class CustomUserDetailsService implements UserDetailsService {
+@Service
+public class CustomUserDetailsService implements UserDetailsService{
     private final UserRepository userRepository;
-
-//    @Autowired
-//    RoleRepository roleRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -33,7 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Role role) {
-        return Collections.singleton(new SimpleGrantedAuthority(role.getName()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.name()));
+        return authorities;
     }
 
 
@@ -45,5 +49,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.existsByEmail(email);
 
     }
+
+
+
+
+
+
+
 
 }

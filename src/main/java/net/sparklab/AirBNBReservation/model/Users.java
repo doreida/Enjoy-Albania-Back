@@ -5,11 +5,14 @@ package net.sparklab.AirBNBReservation.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +26,8 @@ public class Users extends BaseEntity implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Column(nullable = false, unique = true)
     private String username;
     @Lob
@@ -107,11 +112,12 @@ public class Users extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-        //TODO override this part
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.name()));
+        return authorities;
     }
 
-//TODO override this part
+
 
     @Override
     public String getUsername() {
@@ -159,9 +165,6 @@ public class Users extends BaseEntity implements UserDetails {
         isEnabled = enabled;
     }
 
-   @ManyToOne
-   @JoinColumn(name = "role_id",referencedColumnName = "id", nullable = false)
-   private Role role;
 
 
 

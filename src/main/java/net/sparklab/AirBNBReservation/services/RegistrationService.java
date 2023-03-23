@@ -17,35 +17,7 @@ import org.springframework.stereotype.Service;
 public class RegistrationService {
 
 
-    private final UserRepository userRepository;
-//    private final EncryptionService encryptionService;
-    //TODO email service
     public ResponseEntity<?> registerUser(RegistrationDTO registrationDTO) {
-
-        Users usertoSave=new Users();
-
-        if(userRepository.existsByEmail(registrationDTO.getEmail())==Boolean.TRUE)
-        {
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
-        }
-
-        if(userRepository.existsByUsername(registrationDTO.getUsername())==Boolean.TRUE)
-        {
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
-
-        }
-
-        else{
-            usertoSave.setName(registrationDTO.getName());
-            usertoSave.setSurname(registrationDTO.getSurname());
-            usertoSave.setPhone(registrationDTO.getPhone());
-            usertoSave.setEmail(registrationDTO.getEmail());
-            usertoSave.setUsername(registrationDTO.getUsername());
-            userRepository.save(usertoSave);
-            return new ResponseEntity<>("Record saved sucesfully",HttpStatus.OK);
-        }
-
-
+    return null;
     }
-
 }

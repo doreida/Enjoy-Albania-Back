@@ -13,9 +13,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
-    private static final String secret = "EnjoyAlbania2023";
+    private static final String secret = "secret";
     private static final long expiryDuration = 24 * 60 * 60 * 1000; //24h
     public String generateAccessToken(Users user) {
         Map<String, Object> map = new HashMap<>();
@@ -66,8 +65,5 @@ public class JwtUtils {
     private Claims getClaims(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
-
-
-
 
 }
