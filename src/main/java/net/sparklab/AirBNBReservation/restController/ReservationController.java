@@ -3,7 +3,6 @@ package net.sparklab.AirBNBReservation.restController;
 
 import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
-import net.sparklab.AirBNBReservation.dto.UploadDTO;
 import net.sparklab.AirBNBReservation.services.ReservationService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,7 @@ public class ReservationController {
     }
 
     @PostMapping("/uploadFile")
-    public List<UploadDTO> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+    public List<ReservationDTO> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
         return reservationService.uploadData(file);
     }
 

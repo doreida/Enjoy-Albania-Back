@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Currency;
 
 @Entity
@@ -15,17 +17,19 @@ import java.util.Currency;
 @NoArgsConstructor
 @Table(name = "reservations")
 public class Reservation extends BaseEntity{
-    private Long createdDate;
+    private LocalDate createdDate;
     //    private long lastModifiedDate
     private String confirmationCode;
     private int noAdults;
     private int noChildren;
     private int noInfants;
-    private Long startDate;
-    private Long endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalDate bookedDate;
     private int noNights;
     private String listing;
-    private Currency earning;
+    private Currency currency;
+    private BigDecimal earning;
 
     @ManyToOne
     @JoinColumn(name = "guest_id",referencedColumnName = "id", nullable = false)
