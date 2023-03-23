@@ -31,7 +31,7 @@ public class ReservationService {
     public final ReservationDTOToReservation toReservation;
 
 
-    public List<ReservationDTO> findAll(){
+    public List<ReservationDTO> findAll() {
         return reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
     }
 
@@ -39,7 +39,7 @@ public class ReservationService {
 
         InputStream inputStream = file.getInputStream();
 
-        Reader reader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
 
         CsvToBean<ReservationDTO> csvToBean = new CsvToBeanBuilder(reader)
@@ -65,13 +65,11 @@ public class ReservationService {
                 reservationRepository.save(toReservation.convert(reservationDTO));
                 return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
             }
+        } catch (NotValidFileException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
+
         }
-             catch(NotValidFileException e){
-                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-            }
-
-        catch(Exception e){
-                return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
-
     }
 }
