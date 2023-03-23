@@ -27,9 +27,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().matches("/hopperHub/auth(.*)")
-                || request.getServletPath().matches("/hopperHub/user/passwordAuth/forgotPassword(.*)")
-                || request.getServletPath().matches("/hopperHub/user/passwordAuth/resetPassword(.*)")
+        if (request.getServletPath().matches("/enjoyAlbania/auth(.*)")
+                || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth/forgotPassword(.*)")
+                || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth/resetPassword(.*)")
 
         ) {
             filterChain.doFilter(request, response);
