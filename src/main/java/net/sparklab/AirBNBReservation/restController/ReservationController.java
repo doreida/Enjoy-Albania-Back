@@ -27,10 +27,9 @@ public class ReservationController {
         return reservationService.uploadData(file);
     }
 
-//    PostMapping
-//    public ResponseEntity<?> saveOrUpdate(@RequestBody ReservationDTO reservationDTO){
-//        return reservationService.saveOrUpdate(reservationDTO);
-//    }
-
+    PostMapping
+    public ResponseEntity<?> saveOrUpdate(@RequestBody ReservationDTO reservationDTO){
+        return reservationService.saveOrUpdate(reservationDTO);
+    }
 
 }
