@@ -24,7 +24,8 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setCreatedDate(source.getCreatedDate().toString());
             reservationDTO.setEndDate(source.getEndDate().toString());
             reservationDTO.setStartDate(source.getStartDate().toString());
-            reservationDTO.setEarnings(NumberFormat.getCurrencyInstance().format(source.getEarning()).toString());
+            reservationDTO.setBookedDate(source.getBookedDate().toString());
+            reservationDTO.setEarnings(NumberFormat.getCurrencyInstance().format(source.getEarning()));
 
             reservationDTO.setGuest(toGuestDTO.convert(source.getGuest()));
             reservationDTO.setListing(source.getListing());
@@ -33,6 +34,10 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setNrChildren(source.getNoChildren());
             reservationDTO.setNrInfants(source.getNoInfants());
             reservationDTO.setNrNights(source.getNoNights());
+
+            if (source.getGuest().getStatus()!=null) {
+                reservationDTO.setStatus(source.getGuest().getStatus().toString());
+            }
 
 
 

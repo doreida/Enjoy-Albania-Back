@@ -12,7 +12,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/reservation")
+@RequestMapping("/AirBNBReservation/reservation")
+@CrossOrigin("*")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -23,7 +24,7 @@ public class ReservationController {
     }
 
     @PostMapping("/uploadFile")
-    public List<ReservationDTO> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<?> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
         return reservationService.uploadData(file);
     }
 
