@@ -38,7 +38,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 reservation.setId(source.getId());
             }
             //Earning from string to Currency and Decimal
-            String earning = source.getEarnings().replace("€","").substring(1);
+            String earning = source.getEarning().replace("€","").substring(1);
             reservation.setEarning(new BigDecimal(earning));
             reservation.setCurrency(Currency.getInstance("EUR"));
 

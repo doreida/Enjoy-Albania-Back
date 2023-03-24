@@ -4,6 +4,7 @@ package net.sparklab.AirBNBReservation.restController;
 import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.services.ReservationService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,10 +23,8 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/findAll/{pageNumber}/{pageSize}")
-    public List<ReservationDTO> findAll(@PathVariable int pageNumber, @PathVariable int pageSize){
-
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return reservationService.findAll(pageable);
+    public Page<ReservationDTO> findAll(@PathVariable int pageNumber, @PathVariable int pageSize, @RequestParam String sortBy, @RequestParam String sortDir){
+        return reservationService.findAll(pageNumber, pageSize, sortBy, sortDir);
     }
 
     @PostMapping("/uploadFile")

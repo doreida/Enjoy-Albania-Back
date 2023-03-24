@@ -3,7 +3,6 @@ package net.sparklab.AirBNBReservation.services;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.exceptions.CsvValidationException;
 import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
@@ -12,21 +11,17 @@ import net.sparklab.AirBNBReservation.exceptions.EntityExistsException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Reservation;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Currency;
+
 
 @AllArgsConstructor
 @Service
@@ -37,8 +32,20 @@ public class ReservationService {
     public final ReservationDTOToReservation toReservation;
 
 
-    public List<ReservationDTO> findAll(Pageable pageable) {
-        return reservationRepository.findAll(pageable).stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
+    public Page<ReservationDTO> findAll(int pageNumber,int pageSize, String sortBy, String sortDir) {
+
+        Sort sort = Sort.by(sortBy).descending();
+        if (sortDir.equalsIgnoreCase("asc")) {
+            sort = Sort.by(sortBy).ascending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
+
+        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(pageable).stream().map(reservation ->
+                toReservationDTO.convert(reservation)).collect(Collectors.toList());
+
+        Page<ReservationDTO> reservationDTOPage = new PageImpl<>(reservationDTOList, pageable, reservationDTOList.size());
+
+        return reservationDTOPage;
     }
 
     public ResponseEntity<?> uploadData(MultipartFile file) throws IOException {

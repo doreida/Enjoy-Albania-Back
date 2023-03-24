@@ -15,4 +15,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     Boolean existsByConfirmationCode(String confirmationCode);
 
     Page<Reservation> findAll(Pageable pageable);
+
+
 }
