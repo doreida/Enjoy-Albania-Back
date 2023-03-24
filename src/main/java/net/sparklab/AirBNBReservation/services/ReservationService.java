@@ -8,12 +8,14 @@ import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
+import net.sparklab.AirBNBReservation.exceptions.EntityExistsException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Reservation;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -35,26 +37,33 @@ public class ReservationService {
         return reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
     }
 
-    public List<ReservationDTO> uploadData(MultipartFile file) throws Exception {
+    public ResponseEntity<?> uploadData(MultipartFile file) throws IOException {
 
         InputStream inputStream = file.getInputStream();
-
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-
 
         CsvToBean<ReservationDTO> csvToBean = new CsvToBeanBuilder(reader)
                 .withType(ReservationDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
 
-
         List<ReservationDTO> reservations = csvToBean.parse();
-        List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO)).collect(Collectors.toList());
 
-        reservationRepository.saveAll(reservationList);
+        try {
+        List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO)).collect(Collectors.toList());
+            reservationRepository.saveAll(reservationList);
+        }
+        catch (EntityExistsException e){
+            reader.close();
+            inputStream.close();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
+
+        }
         reader.close();
         inputStream.close();
-        return reservations;
+        return new ResponseEntity<>(reservations.size() + " records saved successfully", HttpStatus.OK);
     }
 
     public ResponseEntity<?> saveOrUpdate(ReservationDTO reservationDTO) {
@@ -68,8 +77,7 @@ public class ReservationService {
         } catch (NotValidFileException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<>("Record not saved with error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
