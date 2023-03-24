@@ -1,6 +1,5 @@
 package net.sparklab.AirBNBReservation.restController;
 
-import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.RegistrationDTO;
 import net.sparklab.AirBNBReservation.services.RegistrationService;
 import org.springframework.http.ResponseEntity;
@@ -10,25 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@AllArgsConstructor
+
 @RestController
-@RequestMapping("/enjoyalbania/registr")
+@RequestMapping("/enjoyAlbania")
 public class RegistrationController {
 
 private final RegistrationService registrationService;
 
-    @PostMapping
+
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
+
+
+    @PostMapping("/registration")
     public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO) {
 
         return registrationService.registerUser(registrationDTO);
 
 
     }
-
-
-
-
-
 
 
 }
