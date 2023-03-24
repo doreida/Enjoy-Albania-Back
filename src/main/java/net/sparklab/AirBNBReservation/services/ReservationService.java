@@ -12,6 +12,10 @@ import net.sparklab.AirBNBReservation.exceptions.EntityExistsException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Reservation;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,8 +37,8 @@ public class ReservationService {
     public final ReservationDTOToReservation toReservation;
 
 
-    public List<ReservationDTO> findAll() {
-        return reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
+    public List<ReservationDTO> findAll(Pageable pageable) {
+        return reservationRepository.findAll(pageable).stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
     }
 
     public ResponseEntity<?> uploadData(MultipartFile file) throws IOException {
