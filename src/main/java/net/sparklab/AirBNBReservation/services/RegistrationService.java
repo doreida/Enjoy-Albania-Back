@@ -2,6 +2,7 @@ package net.sparklab.AirBNBReservation.services;
 
 
 
+import net.sparklab.AirBNBReservation.dto.ConfirmationRequest;
 import net.sparklab.AirBNBReservation.dto.RegistrationDTO;
 import net.sparklab.AirBNBReservation.model.Role;
 import net.sparklab.AirBNBReservation.model.Users;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ public class RegistrationService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
+    private String primary_password="enjoyalbaniasparklab";
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -55,8 +58,7 @@ public class RegistrationService {
             usertoSave.setConfirmationToken(generateConfirmationToken());
             usertoSave.setTokenCreationDate(LocalDateTime.now());
             usertoSave.setRole(Role.valueOf(registrationDTO.getRole()));
-
-
+            usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
             userRepository.save(usertoSave);
 
            String link="http://localhost:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
@@ -73,4 +75,24 @@ public class RegistrationService {
         return confirmationToken;
     }
 
+    @Transactional
+    public String savePassword(String token, ConfirmationRequest confirmationRequest) {
+
+        Users userToUpdatePassword=userRepository.findUsersByConfirmationToken(token);
+        if(userToUpdatePassword.getTokenConfirmationDate()!=null){
+            throw new IllegalStateException("email already confirmed");
+        }
+        LocalDateTime expiredAt=userToUpdatePassword.getTokenCreationDate().plusHours(24);
+        if(expiredAt.isBefore(LocalDateTime.now())){
+            throw new IllegalStateException("token expired");
+            //TODO delete user after24h fromdb
+        }
+        userToUpdatePassword.setTokenConfirmationDate(LocalDateTime.now());
+        String encodedUserPassword=bCryptPasswordEncoder.encode(confirmationRequest.getPassword());
+        userToUpdatePassword.setPassword(encodedUserPassword);
+        userRepository.save(userToUpdatePassword);
+
+       //userRepository.enableUser(userToUpdatePassword.getEmail());
+        return "User password saved correctly";
+    }
 }

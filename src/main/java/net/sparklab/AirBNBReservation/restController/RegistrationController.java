@@ -1,13 +1,10 @@
 package net.sparklab.AirBNBReservation.restController;
 
+import net.sparklab.AirBNBReservation.dto.ConfirmationRequest;
 import net.sparklab.AirBNBReservation.dto.RegistrationDTO;
 import net.sparklab.AirBNBReservation.services.RegistrationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -29,6 +26,12 @@ private final RegistrationService registrationService;
 
 
     }
+    @PostMapping("savepassword/{token}")
+    public String savePassword(@PathVariable("token") String token, @RequestBody ConfirmationRequest confirmationRequest) {
 
+        return registrationService.savePassword(token, confirmationRequest);
+
+
+    }
 
 }
