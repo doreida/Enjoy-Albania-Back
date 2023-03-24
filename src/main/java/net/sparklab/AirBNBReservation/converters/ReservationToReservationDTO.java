@@ -25,9 +25,10 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setEndDate(source.getEndDate().toString());
             reservationDTO.setStartDate(source.getStartDate().toString());
             reservationDTO.setBookedDate(source.getBookedDate().toString());
-            reservationDTO.setEarnings(NumberFormat.getCurrencyInstance().format(source.getEarning()));
+            reservationDTO.setEarning(NumberFormat.getCurrencyInstance().format(source.getEarning()));
 
             reservationDTO.setGuest(toGuestDTO.convert(source.getGuest()));
+            reservationDTO.setGuestName(source.getGuest().getFirstName() + " " + source.getGuest().getLastName());
             reservationDTO.setListing(source.getListing());
             reservationDTO.setConfirmCode(source.getConfirmationCode());
             reservationDTO.setNrAdults(source.getNoAdults());

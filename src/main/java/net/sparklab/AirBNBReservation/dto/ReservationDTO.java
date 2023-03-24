@@ -39,7 +39,7 @@ public class ReservationDTO {
     @CsvBindByName(column = "Listing")
     private String listing;
     @CsvBindByName(column = "Earnings")
-    private String earnings;
+    private String earning;
 
 
 }
