@@ -3,10 +3,7 @@ package net.sparklab.AirBNBReservation.restController;
 import lombok.RequiredArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
 import net.sparklab.AirBNBReservation.services.UserService;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("enjoyAlbania/user")
@@ -15,7 +12,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/update")
+    @PutMapping ("/update")
     public Object updateUser(@ModelAttribute ProfileUpdateDTO profileUpdateDTO){
         return userService.updateUser(profileUpdateDTO);
     }

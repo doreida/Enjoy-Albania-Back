@@ -88,6 +88,7 @@ public class SecurityConfig {
                 .antMatchers("/enjoyAlbania/user/**").permitAll()
                 .antMatchers("/enjoyAlbania/guest/**").hasAnyAuthority( "ADMIN")
                 .antMatchers("/enjoyAlbania/auth/**").permitAll()
+                .antMatchers("/enjoyAlbania/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
