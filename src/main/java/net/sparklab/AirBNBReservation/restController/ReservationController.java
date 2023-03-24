@@ -4,6 +4,10 @@ package net.sparklab.AirBNBReservation.restController;
 import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.services.ReservationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,9 +22,9 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @GetMapping("/findAll")
-    public List<ReservationDTO> findAll(){
-        return reservationService.findAll();
+    @GetMapping("/findAll/{pageNumber}/{pageSize}")
+    public Page<ReservationDTO> findAll(@PathVariable int pageNumber, @PathVariable int pageSize, @RequestParam String sortBy, @RequestParam String sortDir){
+        return reservationService.findAll(pageNumber, pageSize, sortBy, sortDir);
     }
 
     @PostMapping("/uploadFile")
