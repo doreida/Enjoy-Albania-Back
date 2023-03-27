@@ -41,20 +41,5 @@ public class CustomUserDetailsService implements UserDetailsService{
     }
 
 
-    public Users findByEmail(String email) {
-        return userRepository.findUsersByEmail(email).get();
-    }
-
-    public boolean exists(String email) {
-        return userRepository.existsByEmail(email);
-
-    }
-
-
-
-
-
-
-
 
 }

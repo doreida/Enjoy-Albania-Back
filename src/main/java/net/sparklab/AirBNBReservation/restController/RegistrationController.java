@@ -31,7 +31,6 @@ private final RegistrationService registrationService;
 
         return registrationService.savePassword(token, confirmationRequest);
 
-
     }
 
 }

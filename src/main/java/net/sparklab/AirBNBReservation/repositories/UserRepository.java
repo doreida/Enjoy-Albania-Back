@@ -15,8 +15,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<Users,Long> {
 
-    boolean existsByEmail(String email);
 
+    boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 
     Optional<Users>findUsersByUsername(String username);
@@ -30,8 +30,10 @@ public interface UserRepository extends JpaRepository<Users,Long> {
 
 
 
-//    @Transactional
 //    @Modifying(clearAutomatically = true)
-//    @Query(value = "UPDATE users SET is_enabled =1 WHERE email=:email",nativeQuery = true)
+//    @Query(value = "UPDATE users SET is_enabled =TRUE WHERE email=:email",nativeQuery = true)
 //    void enableUser(@Param("email") String email);
+
+
+
 }

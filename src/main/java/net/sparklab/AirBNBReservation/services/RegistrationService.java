@@ -8,15 +8,17 @@ import net.sparklab.AirBNBReservation.model.Role;
 import net.sparklab.AirBNBReservation.model.Users;
 import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static java.lang.Boolean.TRUE;
 
 
 
@@ -39,16 +41,21 @@ public class RegistrationService {
 
         Users usertoSave=new Users();
 
-        if(userRepository.existsByEmail(registrationDTO.getEmail())==Boolean.TRUE)
-        {//throw new IllegalStateException("email already taken");
+
+        if(userRepository.existsByEmail(registrationDTO.getEmail())== TRUE)
+        {
+
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByUsername(registrationDTO.getUsername())==Boolean.TRUE)
-        {  //throw new IllegalStateException("username already taken");
+        if(userRepository.existsByUsername(registrationDTO.getUsername())== TRUE)
+        {
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 
         }
+
+
+
         else{
             usertoSave.setName(registrationDTO.getName());
             usertoSave.setSurname(registrationDTO.getSurname());
@@ -75,24 +82,34 @@ public class RegistrationService {
         return confirmationToken;
     }
 
-    @Transactional
+
     public String savePassword(String token, ConfirmationRequest confirmationRequest) {
 
         Users userToUpdatePassword=userRepository.findUsersByConfirmationToken(token);
-        if(userToUpdatePassword.getTokenConfirmationDate()!=null){
-            throw new IllegalStateException("email already confirmed");
+
+           if(userToUpdatePassword.getTokenConfirmationDate()!=null){
+               return "user already confirmed";
         }
+
+
         LocalDateTime expiredAt=userToUpdatePassword.getTokenCreationDate().plusHours(24);
         if(expiredAt.isBefore(LocalDateTime.now())){
-            throw new IllegalStateException("token expired");
+           return "token is expired";
             //TODO delete user after24h fromdb
         }
         userToUpdatePassword.setTokenConfirmationDate(LocalDateTime.now());
         String encodedUserPassword=bCryptPasswordEncoder.encode(confirmationRequest.getPassword());
         userToUpdatePassword.setPassword(encodedUserPassword);
+        userToUpdatePassword.setEnabled(TRUE);
         userRepository.save(userToUpdatePassword);
 
-       //userRepository.enableUser(userToUpdatePassword.getEmail());
         return "User password saved correctly";
     }
+
+
+
+
+
+
+
 }
