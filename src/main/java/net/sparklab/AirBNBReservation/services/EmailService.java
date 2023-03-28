@@ -1,7 +1,9 @@
 package net.sparklab.AirBNBReservation.services;
 
+import net.sparklab.AirBNBReservation.model.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -12,7 +14,8 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
-
+    @Autowired
+    private JavaMailSender emailSender;
     private final static Logger LOGGER = LoggerFactory
             .getLogger(EmailService.class);
 
@@ -108,6 +111,37 @@ public class EmailService {
                 "\n" +
                 "</div></div>";
     }
+
+
+
+    public void sendMessage(Users user, String siteURL) throws MessagingException {
+        String toAddress = user.getEmail();
+        String link = "http://localhost:3000/enjoyAlbania/resetPassword/" + user.getToken();
+        String fromAddress = "enjoyalbania.assistance@gmail.com";
+        String senderName = "Enjoy Albania";
+        String subject = "Reset Your Password";
+        String body = "Dear [[name]],<br>"
+                + "Please click the link below to reset your password:<br>"
+                + "<h3><a href=" + link +"\">RESET PASSWORD</a></h3>"
+                + "<p style=\"clor:blue\"> This link will expire in 1 hour.</p>"
+                + "Thank you,<br>"
+                + "Enjoy Albania";
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+        body = body.replace("[[name]]", user.getName());
+        String verifyURL = siteURL + "/verify?code" + user.getToken();
+        body = body.replace("[[URL]]", verifyURL);
+        helper.setText(body, true);
+        emailSender.send(message);
+    }
+
+
+
+
 
 
 

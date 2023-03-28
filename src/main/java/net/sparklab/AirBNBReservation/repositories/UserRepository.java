@@ -27,8 +27,7 @@ public interface UserRepository extends JpaRepository<Users,Long> {
 
     Users findUsersByConfirmationToken(String token);
 
-
-
+    Users findByToken(String token);
 
 //    @Transactional
 //    @Modifying(clearAutomatically = true)
