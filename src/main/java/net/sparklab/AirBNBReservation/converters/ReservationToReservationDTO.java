@@ -40,8 +40,6 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
                 reservationDTO.setStatus(source.getGuest().getStatus().toString());
             }
 
-
-
             return reservationDTO;
         }
 

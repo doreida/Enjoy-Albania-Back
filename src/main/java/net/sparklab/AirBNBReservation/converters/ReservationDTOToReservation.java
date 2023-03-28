@@ -15,7 +15,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
@@ -42,10 +44,6 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             reservation.setEarning(new BigDecimal(earning));
             reservation.setCurrency(Currency.getInstance("EUR"));
 
-
-
-
-
             //Dates from string to LocalDate from csv
             reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), DateTimeFormatter.ofPattern("d/MM/uuuu")));
             reservation.setEndDate(LocalDate.parse(source.getEndDate(), DateTimeFormatter.ofPattern("M/d/uuuu")));
@@ -55,7 +53,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             if (source.getId()!=null){
                 reservation.setCreatedDate(reservationRepository.findById(source.getId()).get().getCreatedDate());
             }else {
-                reservation.setCreatedDate(LocalDate.now());
+                reservation.setCreatedDate(LocalDateTime.now());
             }
             reservation.setListing(source.getListing());
             reservation.setNoNights(source.getNrNights());
