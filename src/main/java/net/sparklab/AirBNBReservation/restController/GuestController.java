@@ -5,16 +5,14 @@ import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.services.GuestService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("enjoyAlbania/guest")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class GuestController {
 
     private final GuestService guestService;

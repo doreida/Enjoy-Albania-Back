@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Guest extends BaseEntity{
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String contact;
     @Enumerated(EnumType.STRING)
     private Status status;
