@@ -1,6 +1,7 @@
-package net.sparklab.AirBNBReservation.model;
+package net.sparklab.AirBNBReservation.specifications;
 
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
+import net.sparklab.AirBNBReservation.model.Reservation;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

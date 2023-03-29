@@ -9,11 +9,10 @@ import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
-import net.sparklab.AirBNBReservation.exceptions.EntityExistsException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
-import net.sparklab.AirBNBReservation.model.ReservationSpecification;
+import net.sparklab.AirBNBReservation.specifications.ReservationSpecification;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
 import org.springframework.data.domain.*;
@@ -23,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +97,9 @@ public class ReservationService {
             if (reservationRepository.existsByConfirmationCode(reservationDTO.getConfirmationCode()) && reservationDTO.getId() == null) {
                 return new ResponseEntity<>("There is already a reservation with this confirmation code", HttpStatus.BAD_REQUEST);
             } else {
-                reservationRepository.save(toReservation.convert(reservationDTO));
+                Reservation reservation = toReservation.convert(reservationDTO);
+                guestRepository.save(reservation.getGuest());
+                reservationRepository.save(reservation);
                 return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
             }
         } catch (NotValidFileException e) {
