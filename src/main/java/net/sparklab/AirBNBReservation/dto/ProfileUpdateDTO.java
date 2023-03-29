@@ -12,4 +12,7 @@ public class ProfileUpdateDTO {
     String email;
     String phone;
     MultipartFile photo;
+    String fileType;
+    String fileName;
+     byte[] photobyte;
 }

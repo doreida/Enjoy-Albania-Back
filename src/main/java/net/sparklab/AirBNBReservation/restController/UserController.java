@@ -17,5 +17,9 @@ public class UserController {
         return userService.updateUser(profileUpdateDTO);
     }
 
+    @GetMapping("/{id}")
+    public ProfileUpdateDTO findUserById(@PathVariable String id){
+        return userService.findById(id);
+    }
 
 }
