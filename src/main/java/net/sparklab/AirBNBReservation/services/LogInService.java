@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 
 public class LogInService {
@@ -42,15 +44,20 @@ public class LogInService {
                     loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
             System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtUtils.generateAccessToken(userRepository.findUsersByEmail(loginRequestDTO.getEmail()).get());
+            String token = jwtUtils.generateAccessToken(userRepository.findUsersByEmailEnabled(loginRequestDTO.getEmail()).get());
             //apiResponse.setAccessToken(token);
-            apiResponse= setUserData(userRepository.findUsersByEmail(loginRequestDTO.getEmail()).get(),token);
+            apiResponse= setUserData(userRepository.findUsersByEmailEnabled(loginRequestDTO.getEmail()).get(),token);
 
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
         } catch (BadCredentialsException badCredentialsException) {
 
             return "Bad credentials! ";
+
+        }
+        catch (NoSuchElementException recordException) {
+
+            return "This user with this credentials doesn't exist";
 
         }
     }

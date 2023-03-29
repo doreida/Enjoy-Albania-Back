@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,8 +41,15 @@ public class Users extends BaseEntity implements UserDetails {
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired = true;
-    private boolean isEnabled=true;
+    private boolean isEnabled;
 
+
+    private String confirmationToken;
+
+    private LocalDateTime tokenCreationDate;
+    private LocalDateTime tokenCreationDate_forgetpassword;
+    private String token;
+    private LocalDateTime tokenConfirmationDate;
 
     //TODO add roles
 
