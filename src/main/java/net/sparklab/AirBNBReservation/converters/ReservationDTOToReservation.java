@@ -32,6 +32,10 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
     public Reservation convert(ReservationDTO source) {
 
         if (source!=null){
+            if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode())){
+                return null;
+            }
+
             Reservation reservation = new Reservation();
 
             if (source.getId()!=null){
@@ -47,10 +51,9 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
 
 
             //Dates from string to LocalDate from csv
-            reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), DateTimeFormatter.ofPattern("d/MM/uuuu")));
+            reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             reservation.setEndDate(LocalDate.parse(source.getEndDate(), DateTimeFormatter.ofPattern("M/d/uuuu")));
             reservation.setStartDate(LocalDate.parse(source.getStartDate(), DateTimeFormatter.ofPattern("M/d/uuuu")));
-
 
             if (source.getId()!=null){
                 reservation.setCreatedDate(reservationRepository.findById(source.getId()).get().getCreatedDate());
@@ -63,10 +66,10 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             reservation.setNoInfants(source.getNrInfants());
             reservation.setNoChildren(source.getNrChildren());
 
-            if (reservationRepository.existsByConfirmationCode(source.getConfirmCode())){
-            throw new EntityExistsException("A record with confirmation code: "+ source.getConfirmCode() + " already exists");
+            if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode())){
+            throw new EntityExistsException("A record with confirmation code: "+ source.getConfirmationCode() + " already exists");
             }else {
-                reservation.setConfirmationCode(source.getConfirmCode());
+                reservation.setConfirmationCode(source.getConfirmationCode());
             }
 
             //Splitting Full name of the Guest and finding if an Guest Record exist, if not create a new guest
@@ -83,7 +86,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                     guestDTO.setStatus(source.getStatus().equals("Past guest") ? "Past_Guest" : null);
                 }
                 guestDTO.setContact(source.getContact());
-                Guest guest = guestRepository.save(guestDTOtoGuest.convert(guestDTO));
+                Guest guest = guestDTOtoGuest.convert(guestDTO);
                 reservation.setGuest(guest);
             }else {
                 reservation.setGuest(guestRepository.findByFirstNameAndLastName(firstName,lastName));

@@ -4,12 +4,17 @@ package net.sparklab.AirBNBReservation.services;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AllArgsConstructor;
+import net.sparklab.AirBNBReservation.converters.FilterDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
+import net.sparklab.AirBNBReservation.dto.FilterDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.exceptions.EntityExistsException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
+import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
+import net.sparklab.AirBNBReservation.model.ReservationSpecification;
+import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
@@ -18,7 +23,10 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,23 +38,35 @@ public class ReservationService {
     public final ReservationRepository reservationRepository;
     public final ReservationToReservationDTO toReservationDTO;
     public final ReservationDTOToReservation toReservation;
+    public final FilterDTOToReservation filterDTOToReservation;
+    public final GuestRepository guestRepository;
 
 
-    public Page<ReservationDTO> findAll(int pageNumber,int pageSize, String sortBy, String sortDir) {
+    public Page<ReservationDTO> findAll(FilterDTO filterDTO){
 
-        Sort sort = Sort.by(sortBy).descending();
-        if (sortDir.equalsIgnoreCase("asc")) {
-            sort = Sort.by(sortBy).ascending();
+        Sort sort = Sort.by(filterDTO.getSortBy()).descending();
+        if (filterDTO.getSortDir().equalsIgnoreCase("asc")) {
+            sort = Sort.by(filterDTO.getSortBy()).ascending();
         }
-        Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
+        Pageable pageable = PageRequest.of(0, filterDTO.getPageSize(), sort);
 
-        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(pageable).stream().map(reservation ->
+        Reservation filter = filterDTOToReservation.convert(filterDTO);
+
+        ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
+
+        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(specification).stream().map(reservation ->
                 toReservationDTO.convert(reservation)).collect(Collectors.toList());
 
-        Page<ReservationDTO> reservationDTOPage = new PageImpl<>(reservationDTOList, pageable, reservationDTOList.size());
+        int total = reservationDTOList.size();
+        int offset = (int) pageable.getOffset();
+
+        List<ReservationDTO> content = reservationDTOList.subList(offset, Math.min(offset + filterDTO.getPageSize(), total));
+
+        Page<ReservationDTO> reservationDTOPage = new PageImpl<>(content, pageable, reservationDTOList.size());
 
         return reservationDTOPage;
     }
+
 
     public ResponseEntity<?> uploadData(MultipartFile file) throws IOException {
 
@@ -60,26 +80,25 @@ public class ReservationService {
 
         List<ReservationDTO> reservations = csvToBean.parse();
 
-        try {
-        List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO)).collect(Collectors.toList());
-            reservationRepository.saveAll(reservationList);
-        }
-        catch (EntityExistsException e){
-            reader.close();
-            inputStream.close();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }catch (Exception e) {
-            return new ResponseEntity<>("Record not saved successfully", HttpStatus.BAD_REQUEST);
+        List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO))
+                .filter(reservation -> reservation!=null).collect(Collectors.toList());
 
+        List<Guest> guestList = reservationList.stream().map(reservation -> reservation.getGuest()).collect(Collectors.toList());
+
+        if (guestList.size()!=0){
+            guestRepository.saveAll(guestList);
+        }
+        if (reservationList.size()!=0) {
+            reservationRepository.saveAll(reservationList);
         }
         reader.close();
         inputStream.close();
-        return new ResponseEntity<>(reservations.size() + " records saved successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Reservations saved: " + reservationList.size(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> saveOrUpdate(ReservationDTO reservationDTO) {
         try {
-            if (reservationRepository.existsByConfirmationCode(reservationDTO.getConfirmCode()) && reservationDTO.getId() == null) {
+            if (reservationRepository.existsByConfirmationCode(reservationDTO.getConfirmationCode()) && reservationDTO.getId() == null) {
                 return new ResponseEntity<>("There is already a reservation with this confirmation code", HttpStatus.BAD_REQUEST);
             } else {
                 reservationRepository.save(toReservation.convert(reservationDTO));
@@ -91,4 +110,17 @@ public class ReservationService {
             return new ResponseEntity<>("Record not saved with error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<?> delete(String id){
+        Long parseId;
+        try {
+            parseId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Id: " + id + " cannot be parsed");
+        }
+        reservationRepository.deleteById(parseId);
+        return new ResponseEntity("Task deleted", HttpStatus.OK);
+    }
+
+
 }

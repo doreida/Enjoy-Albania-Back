@@ -15,7 +15,7 @@ public class ReservationDTO {
     //    private long lastModifiedDate
     private GuestDTO guest;
     @CsvBindByName(column = "Confirmation code")
-    private String confirmCode;
+    private String confirmationCode;
     @CsvBindByName(column = "Status")
     private String status;
     @CsvBindByName(column = "Guest name")
