@@ -30,9 +30,9 @@ public class UserService {
 
     public ProfileUpdateDTO findById(String id) {
         Long parseId;
-        try {            parseId = Long.parseLong(id);
+        try {  parseId = Long.parseLong(id);
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("Photo id: \"" + id + "\" can't be parsed!");
+            throw new NumberFormatException("User id: \"" + id + "\" can't be parsed!");
         }        return toProfileUpdate.convert(userRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
     }
 
