@@ -1,29 +1,42 @@
+package net.sparklab.AirBNBReservation.services;
 
-
+import net.sparklab.AirBNBReservation.converters.ProfileUpdateDTOToUser;
+import net.sparklab.AirBNBReservation.converters.UserToProfileUpdate;
+import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
 import net.sparklab.AirBNBReservation.dto.ResetpasswordDTO;
+import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.model.Users;
 import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
+public class UserService{
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 60;
 
     private final UserRepository userRepository;
     private final CustomUserDetailsService customUserDetailsService;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserToProfileUpdate toProfileUpdate;
+    private final ProfileUpdateDTOToUser toUser;
 
-    public UserService(UserRepository userRepository, CustomUserDetailsService customUserDetailsService, EmailService emailService,BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, CustomUserDetailsService customUserDetailsService, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, UserToProfileUpdate toProfileUpdate, ProfileUpdateDTOToUser toUser) {
         this.userRepository = userRepository;
         this.customUserDetailsService = customUserDetailsService;
         this.emailService = emailService;
         this.bCryptPasswordEncoder= bCryptPasswordEncoder;
+        this.toProfileUpdate = toProfileUpdate;
+        this.toUser = toUser;
     }
 
 
@@ -48,22 +61,58 @@ import java.util.UUID;
         user.setToken(generateToken());
         user.setTokenCreationDate_forgetpassword(LocalDateTime.now());
         user = userRepository.save(user);
-    @Autowired
-    private final UserRepository userRepository;
-    private final UserToProfileUpdate toProfileUpdate;
-    private final ProfileUpdateDTOToUser toUser;
 
-    public UserService(UserRepository userRepository, UserToProfileUpdate toProfileUpdate, ProfileUpdateDTOToUser toUser) {
-        this.userRepository = userRepository;
-        this.toProfileUpdate = toProfileUpdate;
-        this.toUser = toUser;
+        if(customUserDetailsService.exists(email)){
+            emailService.sendMessage(user,email);
+        }
+        return new ResponseEntity<>(user.getToken(),HttpStatus.OK);
     }
 
-    public ProfileUpdateDTO findById(String id) {
-        Long parseId;
-        try {  parseId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("User id: \"" + id + "\" can't be parsed!");
-        }        return toProfileUpdate.convert(userRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
+
+    public String resetPassword(String uuid, ResetpasswordDTO resetpasswordDTO){
+        Optional<Users> optionalUser = Optional.ofNullable(userRepository.findByToken(uuid));
+        if (!optionalUser.isPresent()){
+            return "Invalid redirection link";
+        }
+        LocalDateTime tokenCreationDate = optionalUser.get().getTokenCreationDate_forgetpassword();
+        if(tokenIsExpired(tokenCreationDate)){
+            return "Token is expired";
+        }
+        Users user = optionalUser.get();
+        user.setPassword(bCryptPasswordEncoder.encode(resetpasswordDTO.getPassword()));
+        userRepository.save(user);
+        user.setToken(null);
+        userRepository.save(user);
+        return "Your password was successfully changed!";
     }
 
+
+
+    public ProfileUpdateDTO findById(String id){
+            Long parseId;
+            try {
+                parseId = Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("User id: \"" + id + "\" can't be parsed!");
+            }
+            return toProfileUpdate.convert(userRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
+        }
+
+
+    @Transactional
+    public ResponseEntity<?> updateUser(ProfileUpdateDTO profileUpdateDTO) {
+        try {
+            Users user = userRepository.save(toUser.convert(profileUpdateDTO));
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("User details are not updated",HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
+
+
+
+    }

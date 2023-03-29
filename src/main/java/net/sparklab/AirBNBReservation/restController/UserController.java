@@ -2,8 +2,12 @@ package net.sparklab.AirBNBReservation.restController;
 
 import lombok.RequiredArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
+import net.sparklab.AirBNBReservation.dto.ResetpasswordDTO;
 import net.sparklab.AirBNBReservation.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping("enjoyAlbania/user")
