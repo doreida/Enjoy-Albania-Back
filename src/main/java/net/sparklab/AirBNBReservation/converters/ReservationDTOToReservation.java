@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Currency;
 
 @Component
@@ -42,35 +43,50 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 reservation.setId(source.getId());
             }
             //Earning from string to Currency and Decimal
-            String earning = source.getEarning().replace("€","").substring(1);
+            String earning = source.getEarning().replace("€","");
             reservation.setEarning(new BigDecimal(earning));
             reservation.setCurrency(Currency.getInstance("EUR"));
 
 
-
-
+            //Defining 2 date formats for csv and for manual reservation adding
+            DateTimeFormatter standardFormat = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            DateTimeFormatter csvFormat = DateTimeFormatter.ofPattern("M/d/uuuu");
 
             //Dates from string to LocalDate from csv
-            reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            reservation.setEndDate(LocalDate.parse(source.getEndDate(), DateTimeFormatter.ofPattern("M/d/uuuu")));
-            reservation.setStartDate(LocalDate.parse(source.getStartDate(), DateTimeFormatter.ofPattern("M/d/uuuu")));
+            reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), standardFormat));
+
+            try {
+                reservation.setEndDate(LocalDate.parse(source.getEndDate(), csvFormat));
+            }catch (DateTimeParseException e){
+                try {
+                    reservation.setEndDate(LocalDate.parse(source.getEndDate(), standardFormat));
+                }catch (DateTimeParseException e2){
+                    throw e2;
+                }
+            }
+
+            try {
+                reservation.setStartDate(LocalDate.parse(source.getStartDate(), csvFormat));
+            }catch (DateTimeParseException e){
+                try {
+                    reservation.setStartDate(LocalDate.parse(source.getStartDate(), standardFormat));
+                }catch (DateTimeParseException e2){
+                    throw e2;
+                }
+            }
 
             if (source.getId()!=null){
                 reservation.setCreatedDate(reservationRepository.findById(source.getId()).get().getCreatedDate());
             }else {
                 reservation.setCreatedDate(LocalDate.now());
             }
+
             reservation.setListing(source.getListing());
             reservation.setNoNights(source.getNrNights());
             reservation.setNoAdults(source.getNrAdults());
             reservation.setNoInfants(source.getNrInfants());
             reservation.setNoChildren(source.getNrChildren());
-
-            if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode())){
-            throw new EntityExistsException("A record with confirmation code: "+ source.getConfirmationCode() + " already exists");
-            }else {
-                reservation.setConfirmationCode(source.getConfirmationCode());
-            }
+            reservation.setConfirmationCode(source.getConfirmationCode());
 
             //Splitting Full name of the Guest and finding if an Guest Record exist, if not create a new guest
             String fullName = source.getGuestName();
@@ -78,7 +94,8 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
 
             String firstName = nameParts[0];
             String lastName = fullName.replace(firstName+" ","");
-            if (guestRepository.findByFirstNameAndLastName(firstName,lastName)==null) {
+            Guest guest = guestRepository.findByFirstNameAndLastName(firstName,lastName);
+            if (guest==null) {
                 GuestDTO guestDTO = new GuestDTO();
                 guestDTO.setFirstname(firstName);
                 guestDTO.setLastname(lastName);
@@ -86,10 +103,10 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                     guestDTO.setStatus(source.getStatus().equals("Past guest") ? "Past_Guest" : null);
                 }
                 guestDTO.setContact(source.getContact());
-                Guest guest = guestDTOtoGuest.convert(guestDTO);
-                reservation.setGuest(guest);
+                Guest guest1 = guestDTOtoGuest.convert(guestDTO);
+                reservation.setGuest(guest1);
             }else {
-                reservation.setGuest(guestRepository.findByFirstNameAndLastName(firstName,lastName));
+                reservation.setGuest(guest);
             }
             return reservation;
         }
