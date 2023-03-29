@@ -1,4 +1,3 @@
-package net.sparklab.AirBNBReservation.services;
 
 
 import net.sparklab.AirBNBReservation.dto.ResetpasswordDTO;
@@ -7,16 +6,11 @@ import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
-@Service
-public class UserService {
 
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 60;
 
@@ -54,31 +48,22 @@ public class UserService {
         user.setToken(generateToken());
         user.setTokenCreationDate_forgetpassword(LocalDateTime.now());
         user = userRepository.save(user);
+    @Autowired
+    private final UserRepository userRepository;
+    private final UserToProfileUpdate toProfileUpdate;
+    private final ProfileUpdateDTOToUser toUser;
 
-        if(customUserDetailsService.exists(email)){
-            emailService.sendMessage(user,email);
-        }
-        return new ResponseEntity<>(user.getToken(),HttpStatus.OK);
+    public UserService(UserRepository userRepository, UserToProfileUpdate toProfileUpdate, ProfileUpdateDTOToUser toUser) {
+        this.userRepository = userRepository;
+        this.toProfileUpdate = toProfileUpdate;
+        this.toUser = toUser;
     }
 
-
-
-    public String resetPassword(String uuid, ResetpasswordDTO resetpasswordDTO){
-        Optional<Users> optionalUser = Optional.ofNullable(userRepository.findByToken(uuid));
-        if (!optionalUser.isPresent()){
-            return "Invalid redirection link";
-        }
-        LocalDateTime tokenCreationDate = optionalUser.get().getTokenCreationDate_forgetpassword();
-        if(tokenIsExpired(tokenCreationDate)){
-            return "Token is expired";
-        }
-        Users user = optionalUser.get();
-        user.setPassword(bCryptPasswordEncoder.encode(resetpasswordDTO.getPassword()));
-        userRepository.save(user);
-        user.setToken(null);
-        userRepository.save(user);
-        return "Your password was successfully changed!";
+    public ProfileUpdateDTO findById(String id) {
+        Long parseId;
+        try {  parseId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("User id: \"" + id + "\" can't be parsed!");
+        }        return toProfileUpdate.convert(userRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
     }
 
-
-}
