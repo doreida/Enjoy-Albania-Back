@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 
 @Component
@@ -25,12 +26,13 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setEndDate(source.getEndDate().toString());
             reservationDTO.setStartDate(source.getStartDate().toString());
             reservationDTO.setBookedDate(source.getBookedDate().toString());
-            reservationDTO.setEarning(NumberFormat.getCurrencyInstance().format(source.getEarning()));
+
+            reservationDTO.setEarning(NumberFormat.getCurrencyInstance(new Locale("de","DE")).format(source.getEarning()));
 
             reservationDTO.setGuest(toGuestDTO.convert(source.getGuest()));
             reservationDTO.setGuestName(source.getGuest().getFirstName() + " " + source.getGuest().getLastName());
             reservationDTO.setListing(source.getListing());
-            reservationDTO.setConfirmCode(source.getConfirmationCode());
+            reservationDTO.setConfirmationCode(source.getConfirmationCode());
             reservationDTO.setNrAdults(source.getNoAdults());
             reservationDTO.setNrChildren(source.getNoChildren());
             reservationDTO.setNrInfants(source.getNoInfants());
@@ -39,8 +41,6 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             if (source.getGuest().getStatus()!=null) {
                 reservationDTO.setStatus(source.getGuest().getStatus().toString());
             }
-
-
 
             return reservationDTO;
         }
