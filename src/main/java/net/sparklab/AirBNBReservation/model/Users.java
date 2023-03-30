@@ -51,8 +51,6 @@ public class Users extends BaseEntity implements UserDetails {
     private String token;
     private LocalDateTime tokenConfirmationDate;
 
-    //TODO add roles
-
     public String getName() {
         return name;
     }

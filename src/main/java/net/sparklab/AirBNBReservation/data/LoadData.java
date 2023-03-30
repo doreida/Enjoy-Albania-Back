@@ -37,11 +37,11 @@ public class LoadData implements CommandLineRunner {
             userRepository.save(userAdmin);
 
             Users user = new Users();
-            user.setEmail("project_manager@gmail.com");
-            user.setName("Project_Manager");
-            user.setSurname("Project_Manager");
-            user.setUsername("project");
-            String passwordEncode = bCryptPasswordEncoder.encode("0123");
+            user.setEmail("user@gmail.com");
+            user.setName("user");
+            user.setSurname("user");
+            user.setUsername("user");
+            String passwordEncode = bCryptPasswordEncoder.encode("user");
             user.setPassword(passwordEncode);
             user.setRole(Role.USER);
             user.setEnabled(true);

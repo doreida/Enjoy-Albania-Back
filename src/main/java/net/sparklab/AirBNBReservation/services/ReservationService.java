@@ -9,6 +9,7 @@ import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
+import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
@@ -121,4 +122,14 @@ public class ReservationService {
     }
 
 
+    public ReservationDTO findById(String id) {
+        Long parseId;
+        try {
+            parseId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Reservation id: \"" + id + "\" can't be parsed!");
+        }
+        return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
+
+    }
 }
