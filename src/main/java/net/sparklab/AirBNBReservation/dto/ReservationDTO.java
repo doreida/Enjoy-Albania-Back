@@ -3,9 +3,6 @@ package net.sparklab.AirBNBReservation.dto;
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.Currency;
-
 
 @Data
 public class ReservationDTO {
