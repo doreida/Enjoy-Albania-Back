@@ -51,7 +51,7 @@ public class ReservationService {
 
         ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
 
-        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(specification).stream().map(reservation ->
+        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(specification,pageable).stream().map(reservation ->
                 toReservationDTO.convert(reservation)).collect(Collectors.toList());
 
         int total = reservationDTOList.size();
@@ -101,7 +101,11 @@ public class ReservationService {
                 Reservation reservation = toReservation.convert(reservationDTO);
                 guestRepository.save(reservation.getGuest());
                 reservationRepository.save(reservation);
-                return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
+                if (reservationDTO.getId()==null) {
+                    return new ResponseEntity<>("Record saved successfully", HttpStatus.OK);
+                }else {
+                    return new ResponseEntity<>("Record updated successfully", HttpStatus.OK);
+                }
             }
         } catch (NotValidFileException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

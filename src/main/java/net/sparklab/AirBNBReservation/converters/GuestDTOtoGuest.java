@@ -1,14 +1,13 @@
 package net.sparklab.AirBNBReservation.converters;
 
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
-import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.utils.StatusUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GuestDTOtoGuest implements Converter<GuestDTO, Guest> {
+public class GuestDTOtoGuest implements Converter<GuestDTO, net.sparklab.AirBNBReservation.model.Guest> {
     public final GuestRepository guestRepository;
 
     public GuestDTOtoGuest(GuestRepository guestRepository) {
@@ -16,9 +15,9 @@ public class GuestDTOtoGuest implements Converter<GuestDTO, Guest> {
     }
 
     @Override
-    public Guest convert(GuestDTO source) {
+    public net.sparklab.AirBNBReservation.model.Guest convert(GuestDTO source) {
         if(source!=null){
-            Guest guest = new Guest();
+            net.sparklab.AirBNBReservation.model.Guest guest = new net.sparklab.AirBNBReservation.model.Guest();
             if(source.getId()!=null){
                 guest.setId(source.getId());
             }

@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/enjoyAlbania/reservation")
-@CrossOrigin("*")
 public class ReservationController {
 
     private final ReservationService reservationService;

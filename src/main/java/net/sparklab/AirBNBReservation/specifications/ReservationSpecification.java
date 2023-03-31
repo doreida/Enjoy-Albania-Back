@@ -32,6 +32,7 @@ public class ReservationSpecification implements Specification<Reservation> {
 
         //Starting Date and Ending Date Parse
         if (filterDTO.getStart()!=null && filterDTO.getEnd()!=null) {
+
             //Starting Date and Ending Date Parse
             LocalDate startDateParsed = LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu"));
             LocalDate endDateParsed = LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu"));
@@ -56,7 +57,6 @@ public class ReservationSpecification implements Specification<Reservation> {
             BigDecimal earningMax = new BigDecimal(filterDTO.getEarningMax());
 
             predicates.add(cb.between(root.get("earning"), earningMin, earningMax));
-
         }
 
         if (filter.getGuest()!=null) {
@@ -79,7 +79,6 @@ public class ReservationSpecification implements Specification<Reservation> {
         if (filter.getListing()!=null){
             predicates.add(cb.like(root.get("listing"), "%" + filter.getListing() + "%"));
         }
-
 
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
     }

@@ -1,7 +1,6 @@
 package net.sparklab.AirBNBReservation.converters;
 
 
-import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
 import net.sparklab.AirBNBReservation.model.Users;
 import net.sparklab.AirBNBReservation.repositories.UserRepository;

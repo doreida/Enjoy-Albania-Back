@@ -1,10 +1,6 @@
 package net.sparklab.AirBNBReservation.dto;
 
 import lombok.Data;
-import net.sparklab.AirBNBReservation.model.Reservation;
-import net.sparklab.AirBNBReservation.model.Status;
-
-import java.util.List;
 
 @Data
 public class GuestDTO {

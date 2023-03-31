@@ -1,15 +1,14 @@
 package net.sparklab.AirBNBReservation.converters;
 
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
-import net.sparklab.AirBNBReservation.model.Guest;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GuestToGuestDTO implements Converter<Guest, GuestDTO> {
+public class GuestToGuestDTO implements Converter<net.sparklab.AirBNBReservation.model.Guest, GuestDTO> {
 
     @Override
-    public GuestDTO convert(Guest source) {
+    public GuestDTO convert(net.sparklab.AirBNBReservation.model.Guest source) {
         if (source!=null){
             GuestDTO guestDTO = new GuestDTO();
             guestDTO.setId(source.getId());
