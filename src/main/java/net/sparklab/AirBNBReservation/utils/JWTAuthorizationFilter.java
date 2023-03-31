@@ -31,6 +31,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 //                || request.getServletPath().matches("/enjoyAlbania/guest(.*)")
                 || request.getServletPath().matches("/enjoyAlbania/user/passwordAuth(.*)")
                 || request.getServletPath().matches("/enjoyAlbania/registration(.*)")
+                || request.getServletPath().matches("/enjoyAlbania/savepassword(.*)")
 
         ) {
             filterChain.doFilter(request, response);

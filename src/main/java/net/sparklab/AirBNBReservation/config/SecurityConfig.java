@@ -86,6 +86,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/enjoyAlbania/registration").permitAll()
                 .antMatchers("/enjoyAlbania/user/resetPassword/**").permitAll()
+                .antMatchers("/enjoyAlbania/savepassword/**").permitAll()
                 .antMatchers("/enjoyAlbania/guest/**").hasAnyAuthority( "ADMIN")
                 .antMatchers("/enjoyAlbania/enjoyAlbania/reservation/**").hasAnyAuthority( "ADMIN")
                 .antMatchers("/enjoyAlbania/auth/**").permitAll()
