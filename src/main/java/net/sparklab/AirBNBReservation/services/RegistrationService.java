@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class RegistrationService {
         this.emailService = emailService;
     }
 
-    public ResponseEntity<?> registerUser(RegistrationDTO registrationDTO) {
+    public ResponseEntity<?> registerUser(RegistrationDTO registrationDTO) throws AddressException {
 
         Users usertoSave=new Users();
 
@@ -59,14 +60,19 @@ public class RegistrationService {
             usertoSave.setTokenCreationDate(LocalDateTime.now());
             usertoSave.setRole(Role.valueOf(registrationDTO.getRole()));
             usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
-            userRepository.save(usertoSave);
 
+       try {
            String link="http://localhost:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
-       emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
-              return new ResponseEntity<>(usertoSave.getConfirmationToken(), HttpStatus.OK);
+           emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
+           userRepository.save(usertoSave);
+       }
 
+       catch (Exception e){
+            return new ResponseEntity<>("The verification email could not be sent successfully. Please enter a proper email address", HttpStatus.BAD_REQUEST);
+       }
+
+              return new ResponseEntity<>(usertoSave.getConfirmationToken(),HttpStatus.OK);
         }
-
 
     }
 

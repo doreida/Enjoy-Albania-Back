@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 
 @Service
@@ -36,7 +37,11 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject("Enjoy Albania notification");
             mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
+        }
+        catch(AddressException e){
+            LOGGER.error(e.getMessage());
+        }
+        catch (MessagingException e) {
             LOGGER.error("failed to send email", e);
             throw new IllegalStateException("failed to send email");
         }
