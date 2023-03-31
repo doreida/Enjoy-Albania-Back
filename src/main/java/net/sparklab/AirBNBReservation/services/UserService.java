@@ -103,7 +103,7 @@ public class UserService{
     public ResponseEntity<?> updateUser(ProfileUpdateDTO profileUpdateDTO) {
         try {
             Users user = userRepository.save(toUser.convert(profileUpdateDTO));
-            return new ResponseEntity<>(user,HttpStatus.OK);
+            return new ResponseEntity<>("User details are updated sucesfully",HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>("User details are not updated",HttpStatus.BAD_REQUEST);

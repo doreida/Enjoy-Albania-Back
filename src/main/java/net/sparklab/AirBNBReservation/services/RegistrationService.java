@@ -13,11 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
+import static java.lang.Boolean.TRUE;
 
 
 @Service
@@ -35,16 +36,16 @@ public class RegistrationService {
         this.emailService = emailService;
     }
 
-    public ResponseEntity<?> registerUser(RegistrationDTO registrationDTO) {
+    public ResponseEntity<?> registerUser(RegistrationDTO registrationDTO) throws AddressException {
 
         Users usertoSave=new Users();
 
-        if(userRepository.existsByEmail(registrationDTO.getEmail())==Boolean.TRUE)
+        if(userRepository.existsByEmail(registrationDTO.getEmail())== TRUE)
         {//throw new IllegalStateException("email already taken");
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByUsername(registrationDTO.getUsername())==Boolean.TRUE)
+        if(userRepository.existsByUsername(registrationDTO.getUsername())== TRUE)
         {  //throw new IllegalStateException("username already taken");
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 
@@ -59,14 +60,19 @@ public class RegistrationService {
             usertoSave.setTokenCreationDate(LocalDateTime.now());
             usertoSave.setRole(Role.valueOf(registrationDTO.getRole()));
             usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
-            userRepository.save(usertoSave);
 
+       try {
            String link="http://localhost:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
-       emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
-              return new ResponseEntity<>(usertoSave.getConfirmationToken(), HttpStatus.OK);
+           emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
+           userRepository.save(usertoSave);
+       }
 
+       catch (Exception e){
+            return new ResponseEntity<>("The verification email could not be sent successfully. Please enter a proper email address", HttpStatus.BAD_REQUEST);
+       }
+
+              return new ResponseEntity<>(usertoSave.getConfirmationToken(),HttpStatus.OK);
         }
-
 
     }
 
@@ -75,24 +81,34 @@ public class RegistrationService {
         return confirmationToken;
     }
 
+
     @Transactional
     public String savePassword(String token, ConfirmationRequest confirmationRequest) {
 
-        Users userToUpdatePassword=userRepository.findUsersByConfirmationToken(token);
-        if(userToUpdatePassword.getTokenConfirmationDate()!=null){
-            throw new IllegalStateException("email already confirmed");
+        Users userToUpdatePassword = userRepository.findUsersByConfirmationToken(token);
+
+        try {
+            if (userToUpdatePassword.getTokenConfirmationDate() != null) {
+                return "Password is already added successfully.";
+            }
+            LocalDateTime expiredAt = userToUpdatePassword.getTokenCreationDate().plusHours(24);
+            if (expiredAt.isBefore(LocalDateTime.now())) {
+                return "The verification link has expired.";
+                //TODO delete user after24h fromdb
+            }
         }
-        LocalDateTime expiredAt=userToUpdatePassword.getTokenCreationDate().plusHours(24);
-        if(expiredAt.isBefore(LocalDateTime.now())){
-            throw new IllegalStateException("token expired");
-            //TODO delete user after24h fromdb
-        }
+
+      catch(Exception e){
+          return "User password can not be saved.The verification link is incorrect";
+      }
         userToUpdatePassword.setTokenConfirmationDate(LocalDateTime.now());
         String encodedUserPassword=bCryptPasswordEncoder.encode(confirmationRequest.getPassword());
         userToUpdatePassword.setPassword(encodedUserPassword);
+        userToUpdatePassword.setEnabled(TRUE);
         userRepository.save(userToUpdatePassword);
 
        //userRepository.enableUser(userToUpdatePassword.getEmail());
-        return "User password saved correctly";
+        return "User password saved successfully. ";
     }
+
 }

@@ -6,6 +6,8 @@ import net.sparklab.AirBNBReservation.services.RegistrationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.internet.AddressException;
+
 
 @RestController
 @RequestMapping("/enjoyAlbania")
@@ -20,11 +22,13 @@ private final RegistrationService registrationService;
 
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO) {
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO){
 
-        return registrationService.registerUser(registrationDTO);
-
-
+        try {
+            return registrationService.registerUser(registrationDTO);
+        } catch (AddressException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
     @PostMapping("savepassword/{token}")
     public String savePassword(@PathVariable("token") String token, @RequestBody ConfirmationRequest confirmationRequest) {

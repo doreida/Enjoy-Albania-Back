@@ -35,6 +35,11 @@ public class ReservationController {
         return reservationService.findAll(filterDto);
     }
 
+    @GetMapping("/{id}")
+    public ReservationDTO findById( @PathVariable String id){
+        return reservationService.findById(id);
+    }
+
     @DeleteMapping("/id")
     public ResponseEntity<?> delete(String id){
         return reservationService.delete(id);
