@@ -39,8 +39,8 @@ public class ReservationController {
         return reservationService.findById(id);
     }
 
-    @DeleteMapping("/id")
-    public ResponseEntity<?> delete(String id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete( @PathVariable String id){
         return reservationService.delete(id);
     }
 }

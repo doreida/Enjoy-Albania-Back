@@ -55,7 +55,7 @@ public class UserService{
     public ResponseEntity forgotPassword(String email) throws MessagingException{
         Optional<Users> userOptional = userRepository.findUsersByEmail(email);
         if(!userOptional.isPresent()){
-            return new ResponseEntity<>("Invalid email! ", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("No user exists with this email ", HttpStatus.BAD_REQUEST);
         }
         Users user = userOptional.get();
         user.setToken(generateToken());
