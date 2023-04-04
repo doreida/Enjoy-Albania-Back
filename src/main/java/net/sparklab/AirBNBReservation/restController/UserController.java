@@ -23,7 +23,7 @@ private final UserService userService;
 
 
     @PutMapping("/resetPassword/{token}")
-    public String resetPassword(@PathVariable(value = "token") String token, @RequestBody ResetpasswordDTO resetpasswordDTO){
+    public ResponseEntity<?> resetPassword(@PathVariable(value = "token") String token, @RequestBody ResetpasswordDTO resetpasswordDTO){
         return userService.resetPassword(token,resetpasswordDTO);
 
     }

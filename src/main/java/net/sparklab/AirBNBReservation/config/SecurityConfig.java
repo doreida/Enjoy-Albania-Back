@@ -103,7 +103,7 @@ public class SecurityConfig {
                     response.setStatus(HttpStatus.FORBIDDEN.value());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{ \"message\": \"You are not authorized to access this resource.\" }");
+                    response.getWriter().write("{ \"  message\": \"You are not authorized to access this resource.\" }");
                 })
                 .and()
 

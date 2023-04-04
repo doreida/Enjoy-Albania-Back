@@ -69,21 +69,21 @@ public class UserService{
     }
 
 
-    public String resetPassword(String uuid, ResetpasswordDTO resetpasswordDTO){
+    public ResponseEntity<?> resetPassword(String uuid, ResetpasswordDTO resetpasswordDTO){
         Optional<Users> optionalUser = Optional.ofNullable(userRepository.findByToken(uuid));
         if (!optionalUser.isPresent()){
-            return "Invalid redirection link";
+            return  new ResponseEntity<>( "The  redirection link is invalid ",HttpStatus.NOT_ACCEPTABLE);
         }
         LocalDateTime tokenCreationDate = optionalUser.get().getTokenCreationDate_forgetpassword();
         if(tokenIsExpired(tokenCreationDate)){
-            return "Token is expired";
+            return  new ResponseEntity<>("The link has expired. Please complete again the forgot password form.",HttpStatus.NOT_ACCEPTABLE);
         }
         Users user = optionalUser.get();
         user.setPassword(bCryptPasswordEncoder.encode(resetpasswordDTO.getPassword()));
         userRepository.save(user);
         user.setToken(null);
         userRepository.save(user);
-        return "Your password was successfully changed!";
+        return  new ResponseEntity<>("Your password was successfully changed !",HttpStatus.OK);
     }
 
 
