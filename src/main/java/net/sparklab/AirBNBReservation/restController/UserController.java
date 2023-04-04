@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 
 @RestController
-@RequestMapping("enjoyAlbania/user")
+@RequestMapping("enjoyAlbania")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -23,18 +23,18 @@ private final UserService userService;
 
 
     @PutMapping("/resetPassword/{token}")
-    public String resetPassword(@PathVariable(value = "token") String token, @RequestBody ResetpasswordDTO resetpasswordDTO){
+    public ResponseEntity<?> resetPassword(@PathVariable(value = "token") String token, @RequestBody ResetpasswordDTO resetpasswordDTO){
         return userService.resetPassword(token,resetpasswordDTO);
 
     }
 
 
-    @PutMapping ("/update")
+    @PutMapping ("user/update")
     public Object updateUser(@ModelAttribute ProfileUpdateDTO profileUpdateDTO){
         return userService.updateUser(profileUpdateDTO);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("user/{id}")
     public ProfileUpdateDTO findUserById(@PathVariable String id){
         return userService.findById(id);
     }

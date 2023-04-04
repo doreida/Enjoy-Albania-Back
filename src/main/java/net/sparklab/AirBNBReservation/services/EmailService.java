@@ -127,8 +127,8 @@ public class EmailService {
         String subject = "Reset Your Password";
         String body = "Dear [[name]],<br>"
                 + "Please click the link below to reset your password:<br>"
-                + "<h3><a href=" + link +"\">RESET PASSWORD</a></h3>"
-                + "<p style=\"clor:blue\"> This link will expire in 1 hour.</p>"
+                + "<h3><a href=" + link +">RESET PASSWORD</a></h3>"
+                + "<p style=color:blue> This link will expire in 1 hour.</p>"
                 + "Thank you,<br>"
                 + "Enjoy Albania";
         MimeMessage message = emailSender.createMimeMessage();
