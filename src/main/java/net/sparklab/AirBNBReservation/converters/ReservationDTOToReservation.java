@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
+import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
@@ -33,7 +34,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
     public Reservation convert(ReservationDTO source) {
 
         if (source!=null){
-            if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode())){
+            if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode()) && source.getId() == null){
                 return null;
             }
 
@@ -44,11 +45,12 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             }
             //Earning from string to Currency and Decimal
             String earning ;
+
             try {
-                earning = source.getEarning().replace("€","");
+                earning = source.getEarning().replace("€","").replace(",","");
                 reservation.setEarning(new BigDecimal(earning));
             }catch (NumberFormatException e){
-                earning = source.getEarning().replace("€","").substring(1);
+                earning = source.getEarning().replace("€","").replace(",","").substring(1);
                 reservation.setEarning(new BigDecimal(earning));
             }
 
@@ -61,8 +63,6 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             DateTimeFormatter bookedDateCsv = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             //Dates from string to LocalDate from csv
-
-
             try {
                 reservation.setBookedDate(LocalDate.parse(source.getBookedDate(), csvFormat));
             }catch (DateTimeParseException e){
@@ -116,7 +116,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
 
             String firstName = nameParts[0];
             String lastName = fullName.replace(firstName+" ","");
-            net.sparklab.AirBNBReservation.model.Guest guest = guestRepository.findByFirstNameAndLastName(firstName,lastName);
+            Guest guest = guestRepository.findByFirstNameAndLastName(firstName,lastName);
             if (guest==null) {
                 GuestDTO guestDTO = new GuestDTO();
                 guestDTO.setFirstname(firstName);
@@ -125,7 +125,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                     guestDTO.setStatus(source.getStatus().equals("Past guest") || source.getStatus().equals("Past_Guest") ? "Past_Guest" : null);
                 }
                 guestDTO.setContact(source.getContact());
-                net.sparklab.AirBNBReservation.model.Guest guest1 = guestDTOtoGuest.convert(guestDTO);
+                Guest guest1 = guestDTOtoGuest.convert(guestDTO);
                 reservation.setGuest(guest1);
             }else {
                 reservation.setGuest(guest);

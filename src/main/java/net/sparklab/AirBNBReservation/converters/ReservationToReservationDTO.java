@@ -6,6 +6,9 @@ import net.sparklab.AirBNBReservation.model.Reservation;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -27,7 +30,16 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setStartDate(source.getStartDate().toString());
             reservationDTO.setBookedDate(source.getBookedDate().toString());
 
-            reservationDTO.setEarning(NumberFormat.getCurrencyInstance(new Locale("de","DE")).format(source.getEarning()));
+
+            Locale germanLocale = new Locale("de", "DE");
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(germanLocale);
+            symbols.setDecimalSeparator('.');
+            symbols.setGroupingSeparator(',');
+            String pattern = "€#,##0.00";
+            DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+            String formattedNumber = decimalFormat.format(source.getEarning());
+
+            reservationDTO.setEarning(formattedNumber);
 
             reservationDTO.setGuest(toGuestDTO.convert(source.getGuest()));
             reservationDTO.setGuestName(source.getGuest().getFirstName() + " " + source.getGuest().getLastName());
