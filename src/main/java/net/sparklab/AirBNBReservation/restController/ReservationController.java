@@ -40,7 +40,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete( @PathVariable String id){
+    public ResponseEntity<?> delete(@PathVariable String id){
         return reservationService.delete(id);
     }
 }
