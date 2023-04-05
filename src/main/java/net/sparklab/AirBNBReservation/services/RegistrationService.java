@@ -57,13 +57,13 @@ public class RegistrationService {
             usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
 
        try {
-           String link="http://localhost:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
+           String link="http://192.168.10.12:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
            emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
            userRepository.save(usertoSave);
        }
 
        catch (Exception e){
-            return new ResponseEntity<>("The verification email could not be sent successfully. Please enter a proper email address", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The verification email could not be sent successfully.Please check the given  email address", HttpStatus.BAD_REQUEST);
        }
 
               return new ResponseEntity<>(usertoSave.getConfirmationToken(),HttpStatus.OK);
