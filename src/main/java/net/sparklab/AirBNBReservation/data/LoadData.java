@@ -29,7 +29,6 @@ public class LoadData implements CommandLineRunner {
             userAdmin.setEmail("admin@gmail.com");
             userAdmin.setName("Admin");
             userAdmin.setSurname("Admin");
-            userAdmin.setUsername("admin");
             String encodedPassword = bCryptPasswordEncoder.encode("admin");
             userAdmin.setPassword(encodedPassword);
             userAdmin.setRole(Role.ADMIN);
@@ -40,7 +39,6 @@ public class LoadData implements CommandLineRunner {
             user.setEmail("user@gmail.com");
             user.setName("user");
             user.setSurname("user");
-            user.setUsername("user");
             String passwordEncode = bCryptPasswordEncoder.encode("user");
             user.setPassword(passwordEncode);
             user.setRole(Role.USER);

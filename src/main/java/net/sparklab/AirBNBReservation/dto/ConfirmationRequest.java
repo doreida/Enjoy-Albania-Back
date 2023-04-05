@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ConfirmationRequest {
-    private String Username;
     private String confirmationToken;
     private String password;
     private LocalDateTime confirmationDate=LocalDateTime.now();

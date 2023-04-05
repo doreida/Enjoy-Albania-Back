@@ -73,7 +73,6 @@ public class LogInService {
         apiResponse.setProfilePhoto(user.getPhoto());
         apiResponse.setRole(user.getRole().name());
         apiResponse.setProfilePhotoType(user.getFileType());
-        apiResponse.setUsername(user.getUsername());
         return apiResponse;
     }
 }
