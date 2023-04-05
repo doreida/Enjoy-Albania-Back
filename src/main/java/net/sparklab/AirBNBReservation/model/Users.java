@@ -29,8 +29,7 @@ public class Users extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(nullable = false, unique = true)
-    private String username;
+
     @Lob
     @Column(length = 2147483647)
     private byte[] photo;
@@ -112,6 +111,11 @@ public class Users extends BaseEntity implements UserDetails {
         return password;
     }
 
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -125,10 +129,7 @@ public class Users extends BaseEntity implements UserDetails {
 
 
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+
 
 
     @Override
@@ -151,9 +152,7 @@ public class Users extends BaseEntity implements UserDetails {
         return isEnabled;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+
 
     public void setAccountNonExpired(boolean accountNonExpired) {
         isAccountNonExpired = accountNonExpired;

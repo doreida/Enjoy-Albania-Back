@@ -45,17 +45,12 @@ public class RegistrationService {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByUsername(registrationDTO.getUsername())== TRUE)
-        {  //throw new IllegalStateException("username already taken");
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 
-        }
         else{
             usertoSave.setName(registrationDTO.getName());
             usertoSave.setSurname(registrationDTO.getSurname());
             usertoSave.setPhone(registrationDTO.getPhone());
             usertoSave.setEmail(registrationDTO.getEmail());
-            usertoSave.setUsername(registrationDTO.getUsername());
             usertoSave.setConfirmationToken(generateConfirmationToken());
             usertoSave.setTokenCreationDate(LocalDateTime.now());
             usertoSave.setRole(Role.valueOf(registrationDTO.getRole()));
