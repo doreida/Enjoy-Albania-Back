@@ -50,19 +50,24 @@ public class LoadData implements CommandLineRunner {
 
             userRepository.save(user);
 
-            if (sourceRepository.count() == 0)
-
-            {
-                Source source=new Source();
-                source.setSource("AirBNBReservation");
-                sourceRepository.save(source);
-            }
 
         }
     }
 
+    public void saveSource(){
+        if (sourceRepository.count() == 0)
+
+        {
+            Source source=new Source();
+            source.setSource("AirBNBReservation");
+            sourceRepository.save(source);
+        }
+
+    }
     @Override
     public void run(String... args) throws Exception {
         saveUsers();
+        saveSource();
+
     }
 }
