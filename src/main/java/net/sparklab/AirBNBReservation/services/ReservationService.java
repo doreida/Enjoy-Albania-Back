@@ -45,9 +45,6 @@ public class ReservationService {
         if (filterDTO.getSortDir().equalsIgnoreCase("asc")) {
             sort = Sort.by(filterDTO.getSortBy()).ascending();
         }
-//        if (filterDTO.getPageNo()==0){
-//            filterDTO.setPageNo(0);
-//        }
 
         Pageable pageable = PageRequest.of(filterDTO.getPageNo(), filterDTO.getPageSize(), sort);
 
@@ -55,17 +52,10 @@ public class ReservationService {
 
         ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
 
-        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(specification).stream().map(reservation ->
-                toReservationDTO.convert(reservation)).collect(Collectors.toList());
+        Page<Reservation> reservationsPage = reservationRepository.findAll(specification, pageable);
 
-        int total = reservationDTOList.size();
-        int offset = (int) pageable.getOffset();
+        return new PageImpl<>(reservationsPage.stream().map(toReservationDTO::convert).collect(Collectors.toList()), pageable, reservationsPage.getTotalElements());
 
-        List<ReservationDTO> content = reservationDTOList.subList(offset, Math.min(offset + filterDTO.getPageSize(), total));
-
-        Page<ReservationDTO> reservationDTOPage = new PageImpl<>(content, pageable, reservationDTOList.size());
-
-        return reservationDTOPage;
     }
 
 
@@ -144,7 +134,7 @@ public class ReservationService {
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Reservation id: \"" + id + "\" can't be parsed!");
         }
-        return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
+        return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " not found!")));
 
     }
 }
