@@ -1,7 +1,9 @@
 package net.sparklab.AirBNBReservation.data;
 
 import net.sparklab.AirBNBReservation.model.Role;
+import net.sparklab.AirBNBReservation.model.Source;
 import net.sparklab.AirBNBReservation.model.Users;
+import net.sparklab.AirBNBReservation.repositories.SourceRepository;
 import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,13 +14,15 @@ import org.springframework.stereotype.Component;
 public class LoadData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final SourceRepository sourceRepository;
 
 
 
-    public LoadData( BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository) {
+    public LoadData(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, SourceRepository sourceRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
+        this.sourceRepository = sourceRepository;
     }
 
 
@@ -45,6 +49,14 @@ public class LoadData implements CommandLineRunner {
             user.setEnabled(true);
 
             userRepository.save(user);
+
+            if (sourceRepository.count() == 0)
+
+            {
+                Source source=new Source();
+                source.setSource("AirBNBReservation");
+                sourceRepository.save(source);
+            }
 
         }
     }
