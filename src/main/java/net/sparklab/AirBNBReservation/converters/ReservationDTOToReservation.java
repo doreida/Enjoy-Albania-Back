@@ -6,9 +6,13 @@ import lombok.SneakyThrows;
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.model.Guest;
+import net.sparklab.AirBNBReservation.model.Listing;
 import net.sparklab.AirBNBReservation.model.Reservation;
+import net.sparklab.AirBNBReservation.model.Source;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
+import net.sparklab.AirBNBReservation.repositories.ListingRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
+import net.sparklab.AirBNBReservation.repositories.SourceRepository;
 import org.springframework.core.convert.converter.Converter;
 
 import org.springframework.stereotype.Component;
@@ -19,7 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Currency;
-import java.util.Date;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -28,6 +32,8 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
     private final GuestDTOtoGuest guestDTOtoGuest;
     private final GuestRepository guestRepository;
     private final ReservationRepository reservationRepository;
+    private final ListingRepository listingRepository;
+    private final SourceRepository sourceRepository;
 
     @SneakyThrows
     @Override
@@ -102,8 +108,6 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             }else {
                 reservation.setCreatedDate(LocalDateTime.now());
             }
-
-            reservation.setListing(source.getListing());
             reservation.setNoNights(source.getNrNights());
             reservation.setNoAdults(source.getNrAdults());
             reservation.setNoInfants(source.getNrInfants());
@@ -130,6 +134,31 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             }else {
                 reservation.setGuest(guest);
             }
+
+          Listing listing=listingRepository.findByListing(source.getListing());
+            if(listing ==null){
+                Listing savelisting =new Listing();
+                 savelisting.setListing(source.getListing());
+                 listingRepository.save(savelisting);
+                 reservation.setListing(savelisting);
+            }
+            else{
+            reservation.setListing(listing);
+            }
+            Source sourcefind= sourceRepository.findSourcesBySource(source.getSource());
+            if(source.getSource()==null){
+                reservation.setSource(sourceRepository.findSourcesBySource("AirBNBReservation"));
+            }
+           else if(sourcefind==null){
+                Source sourcesave= new Source();
+                sourcesave.setSource(source.getSource());
+                sourceRepository.save(sourcesave);
+                reservation.setSource(sourcesave);
+            }
+            else{
+                reservation.setSource(sourcefind);
+            }
+
             return reservation;
         }
         return null;

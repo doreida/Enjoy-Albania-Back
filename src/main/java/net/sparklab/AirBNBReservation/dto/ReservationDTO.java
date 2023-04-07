@@ -38,5 +38,6 @@ public class ReservationDTO {
     @CsvBindByName(column = "Earnings")
     private String earning;
 
+    private String source;
 
 }

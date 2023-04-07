@@ -43,7 +43,7 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
 
             reservationDTO.setGuest(toGuestDTO.convert(source.getGuest()));
             reservationDTO.setGuestName(source.getGuest().getFirstName() + " " + source.getGuest().getLastName());
-            reservationDTO.setListing(source.getListing());
+            reservationDTO.setListing(source.getListing().getListing());
             reservationDTO.setConfirmationCode(source.getConfirmationCode());
             reservationDTO.setNrAdults(source.getNoAdults());
             reservationDTO.setNrChildren(source.getNoChildren());

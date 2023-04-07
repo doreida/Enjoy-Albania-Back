@@ -13,6 +13,8 @@ import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
+import net.sparklab.AirBNBReservation.model.Source;
+import net.sparklab.AirBNBReservation.repositories.SourceRepository;
 import net.sparklab.AirBNBReservation.specifications.ReservationSpecification;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
@@ -37,6 +39,7 @@ public class ReservationService {
     public final ReservationDTOToReservation toReservation;
     public final FilterDTOToReservation filterDTOToReservation;
     public final GuestRepository guestRepository;
+    private final SourceRepository sourceRepository;
 
 
     public Page<ReservationDTO> findAll(FilterDTO filterDTO){
@@ -71,6 +74,8 @@ public class ReservationService {
 
             List<ReservationDTO> reservations = csvToBean.parse();
 
+
+             Source source=sourceRepository.findSourcesBySource("AirBNBReservation");
             List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO))
                     .filter(reservation -> reservation != null).collect(Collectors.toList());
 
