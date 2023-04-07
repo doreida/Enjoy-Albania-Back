@@ -8,4 +8,5 @@ public interface SourceRepository extends JpaRepository<Source,Long> {
 
     Source findSourcesBySource(String source);
 
+    boolean existsBySource(String source);
 }

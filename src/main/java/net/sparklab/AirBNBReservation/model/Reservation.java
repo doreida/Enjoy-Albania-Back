@@ -44,7 +44,7 @@ public class Reservation extends BaseEntity{
 
 
     @ManyToOne
-    @JoinColumn(name = "source_id",referencedColumnName = "id")
+    @JoinColumn(name = "source_id",referencedColumnName = "id",nullable = true)
     private Source source;
 
 }
