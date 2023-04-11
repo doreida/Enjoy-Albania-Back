@@ -61,9 +61,9 @@ public class UserService{
         user.setToken(generateToken());
         user.setTokenCreationDate_forgetpassword(LocalDateTime.now());
         user = userRepository.save(user);
-
+        String link = "http://192.168.10.12:3000/enjoyAlbania/resetPassword/" + user.getToken();
         if(customUserDetailsService.exists(email)){
-            emailService.sendMessage(user,email);
+            emailService.send(user.getEmail(),emailService.buildResetEmail(user.getName(),link));
         }
         return new ResponseEntity<>(user.getToken(),HttpStatus.OK);
     }
