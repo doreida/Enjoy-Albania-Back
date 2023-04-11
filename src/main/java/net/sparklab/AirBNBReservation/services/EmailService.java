@@ -49,103 +49,171 @@ public class EmailService {
 
 
      String buildEmail(String name, String link) {
-        return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
+        return "<body marginheight=\"0\" topmargin=\"0\" marginwidth=\"0\" style=\"margin: 0px; background-color: #f2f3f8;\" leftmargin=\"0\">\n" +
+                "    <!--100% body table-->\n" +
+                "    <table cellspacing=\"0\" border=\"0\" cellpadding=\"0\" width=\"100%\" bgcolor=\"#f2f3f8\"\n" +
+                "        style=\"@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;\">\n" +
+                "        <tr>\n" +
+                "            <td>\n" +
+                "                <table style=\"background-color: #f2f3f8; max-width:670px;  margin:0 auto;\" width=\"100%\" border=\"0\"\n" +
+                "                    align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"height:80px;\">&nbsp;</td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"text-align:center;\">\n" +
+                "                          <a href=\"https://rakeshmandal.com\" title=\"logo\" target=\"_blank\">\n" +
+                "                           \n" +
+                "                          </a>\n" +
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"height:20px;\">&nbsp;</td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td>\n" +
+                "                            <table width=\"95%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\"\n" +
+                "                                style=\"max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);\">\n" +
+                "                                <tr>\n" +
+                "                                    <td style=\"height:40px;\">&nbsp;</td>\n" +
+                "                                </tr>\n" +
+                "                                <tr>\n" +
+                "                                    <td style=\"padding:0 35px;\">\n" +
+                "                                        <h1 style=\"color:#1e1e2d; font-weight:500; margin:0;font-size:25px;font-family:'Rubik',sans-serif;\"> Hi "+ name +",\n" +
                 "\n" +
-                "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
-                "\n" +
-                "  <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n" +
-                "    <tbody><tr>\n" +
-                "      <td width=\"100%\" height=\"53\" bgcolor=\"#0b0c0c\">\n" +
-                "        \n" +
-                "        <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;max-width:580px\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n" +
-                "          <tbody><tr>\n" +
-                "            <td width=\"70\" bgcolor=\"#0b0c0c\" valign=\"middle\">\n" +
-                "                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
-                "                  <tbody><tr>\n" +
-                "                    <td style=\"padding-left:10px\">\n" +
-                "                  \n" +
-                "                    </td>\n" +
-                "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
-                "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your email</span>\n" +
-                "                    </td>\n" +
-                "                  </tr>\n" +
-                "                </tbody></table>\n" +
-                "              </a>\n" +
+                "                                       <br><br>\n" +
+                "                                        <p style=\"color:#455056; font-size:15px;line-height:24px; margin:0;\">\n" +
+                " A unique link to verify your account has been generated for you. Please, click the following button and complete the form.\n" +
+                "                                          \n" +
+                "                                     \n" +
+                "                                        </p>\n" +
+                "                                          <p style=\"color:red;fornt-weight:200;font-size:14px;\">The unique link will expire in 24 hour</p>\n" +
+                "                                        <a href=\""+ link +"\"\n" +
+                "                                            style=\"background:#00CC88;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;\">Verify\n" +
+                "                                           Account</a>\n" +
+                "                                  \n" +
+                "                                          \n" +
+                "                                       <br>\n" +
+                "                                       <br><p style=\"color:black;font-size:15px\">   Thank you,\n" +
+                "                                       \n" +
+                "                                         EnjoyAlbania\n" +
+                "                                          </p>\n" +
+                "                                    </td>\n" +
+                "                                 \n" +
+                "                                </tr>\n" +
+                "                            \n" +
+                "                                <tr>\n" +
+                "                                    <td style=\"height:40px;\">&nbsp;</td>\n" +
+                "                                 \n" +
+                "                                </tr>\n" +
+                "                             \n" +
+                "                            </table>\n" +
+                "                        </td>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"height:20px;\">&nbsp;</td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"text-align:center;\">\n" +
+                "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>EnjoyAlbania</strong></p>\n" +
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"height:80px;\">&nbsp;</td>\n" +
+                "                    </tr>\n" +
+                "                </table>\n" +
                 "            </td>\n" +
-                "          </tr>\n" +
-                "        </tbody></table>\n" +
-                "        \n" +
-                "      </td>\n" +
-                "    </tr>\n" +
-                "  </tbody></table>\n" +
-                "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
-                "    <tbody><tr>\n" +
-                "      <td width=\"10\" height=\"10\" valign=\"middle\"></td>\n" +
-                "      <td>\n" +
-                "        \n" +
-                "                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
-                "                  <tbody><tr>\n" +
-                "                    <td bgcolor=\"#1D70B8\" width=\"100%\" height=\"10\"></td>\n" +
-                "                  </tr>\n" +
-                "                </tbody></table>\n" +
-                "        \n" +
-                "      </td>\n" +
-                "      <td width=\"10\" valign=\"middle\" height=\"10\"></td>\n" +
-                "    </tr>\n" +
-                "  </tbody></table>\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
-                "    <tbody><tr>\n" +
-                "      <td height=\"30\"><br></td>\n" +
-                "    </tr>\n" +
-                "    <tr>\n" +
-                "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
-                "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
-                "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 24 hours" +
-                "        \n" +
-                "      </td>\n" +
-                "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
-                "    </tr>\n" +
-                "    <tr>\n" +
-                "      <td height=\"30\"><br></td>\n" +
-                "    </tr>\n" +
-                "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
-                "\n" +
-                "</div></div>";
+                "        </tr>\n" +
+                "    </table>\n" +
+                "    <!--/100% body table-->\n" +
+                "</body>";
     }
 
 
 
-    public void sendMessage(Users user, String siteURL) throws MessagingException {
-        String toAddress = user.getEmail();
-        String link = "http://localhost:3000/enjoyAlbania/resetPassword/" + user.getToken();
-        String fromAddress = "enjoyalbania.assistance@gmail.com";
-        String senderName = "Enjoy Albania";
-        String subject = "Reset Your Password";
-        String body = "Dear [[name]],<br>"
-                + "Please click the link below to reset your password:<br>"
-                + "<h3><a href=" + link +">RESET PASSWORD</a></h3>"
-                + "<p style=color:blue> This link will expire in 1 hour.</p>"
-                + "Thank you,<br>"
-                + "Enjoy Albania";
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom(fromAddress);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-        body = body.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/verify?code" + user.getToken();
-        body = body.replace("[[URL]]", verifyURL);
-        helper.setText(body, true);
-        emailSender.send(message);
+
+
+
+    String buildResetEmail(String name,String link ){
+
+      return "<body marginheight=\"0\" topmargin=\"0\" marginwidth=\"0\" style=\"margin: 0px; background-color: #f2f3f8;\" leftmargin=\"0\">\n" +
+              "    <!--100% body table-->\n" +
+              "    <table cellspacing=\"0\" border=\"0\" cellpadding=\"0\" width=\"100%\" bgcolor=\"#f2f3f8\"\n" +
+              "        style=\"@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;\">\n" +
+              "        <tr>\n" +
+              "            <td>\n" +
+              "                <table style=\"background-color: #f2f3f8; max-width:670px;  margin:0 auto;\" width=\"100%\" border=\"0\"\n" +
+              "                    align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"height:80px;\">&nbsp;</td>\n" +
+              "                    </tr>\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"text-align:center;\">\n" +
+              "                        </td>\n" +
+              "                    </tr>\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"height:20px;\">&nbsp;</td>\n" +
+              "                    </tr>\n" +
+              "                    <tr>\n" +
+              "                        <td>\n" +
+              "                            <table width=\"95%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\"\n" +
+              "                                style=\"max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);\">\n" +
+              "                                <tr>\n" +
+              "                                    <td style=\"height:40px;\">&nbsp;</td>\n" +
+              "                                </tr>\n" +
+              "                                <tr>\n" +
+              "                                    <td style=\"padding:0 35px;\">\n" +
+              "                                        <h1 style=\"color:#1e1e2d; font-weight:500; margin:0;font-size:25px;font-family:'Rubik',sans-serif;\"> Hi "+name+",\n" +
+              "\n" +
+              "                                       <br><br>\n" +
+              "                                        <p style=\"color:#455056; font-size:15px;line-height:24px; margin:0;\">\n" +
+              " A unique link to reset your\n" +
+              "                                            password has been generated for you. To reset your password, click the\n" +
+              "                                            following button and reset your password.<br>\n" +
+              "                                          \n" +
+              "                                     \n" +
+              "                                        </p>\n" +
+              "                                          <p style=\"color:red;fornt-weight:200;font-size:14px;\">The unique link will expire in 1 hour</p>\n" +
+              "                                        <a href=\""+ link +"\"\n" +
+              "                                            style=\"background:#00CC88;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;\">Reset\n" +
+              "                                            Password</a>\n" +
+              "                                  \n" +
+              "                                          \n" +
+              "                                       <br>\n" +
+              "                                       <br><p style=\"color:black;font-size:15px\">   Thank you,\n" +
+              "                                       \n" +
+              "                                         EnjoyAlbania\n" +
+              "                                          </p>\n" +
+              "                                    </td>\n" +
+              "                                 \n" +
+              "                                </tr>\n" +
+              "                            \n" +
+              "                                <tr>\n" +
+              "                                    <td style=\"height:40px;\">&nbsp;</td>\n" +
+              "                                 \n" +
+              "                                </tr>\n" +
+              "                             \n" +
+              "                            </table>\n" +
+              "                        </td>\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"height:20px;\">&nbsp;</td>\n" +
+              "                    </tr>\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"text-align:center;\">\n" +
+              "                            <p style=\"font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;\">&copy; <strong>EnjoyAlbania</strong></p>\n" +
+              "                        </td>\n" +
+              "                    </tr>\n" +
+              "                    <tr>\n" +
+              "                        <td style=\"height:80px;\">&nbsp;</td>\n" +
+              "                    </tr>\n" +
+              "                </table>\n" +
+              "            </td>\n" +
+              "        </tr>\n" +
+              "    </table>\n" +
+              "    <!--/100% body table-->\n" +
+              "</body>";
+
     }
-
-
-
 
 
 
