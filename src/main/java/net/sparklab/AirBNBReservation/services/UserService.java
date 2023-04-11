@@ -2,6 +2,7 @@ package net.sparklab.AirBNBReservation.services;
 
 import net.sparklab.AirBNBReservation.converters.ProfileUpdateDTOToUser;
 import net.sparklab.AirBNBReservation.converters.UserToProfileUpdate;
+import net.sparklab.AirBNBReservation.dto.ChangePasswordDTO;
 import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
 import net.sparklab.AirBNBReservation.dto.ResetpasswordDTO;
 import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
@@ -10,12 +11,14 @@ import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,13 +33,16 @@ public class UserService{
     private final UserToProfileUpdate toProfileUpdate;
     private final ProfileUpdateDTOToUser toUser;
 
-    public UserService(UserRepository userRepository, CustomUserDetailsService customUserDetailsService, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, UserToProfileUpdate toProfileUpdate, ProfileUpdateDTOToUser toUser) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, CustomUserDetailsService customUserDetailsService, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, UserToProfileUpdate toProfileUpdate, ProfileUpdateDTOToUser toUser, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.customUserDetailsService = customUserDetailsService;
         this.emailService = emailService;
         this.bCryptPasswordEncoder= bCryptPasswordEncoder;
         this.toProfileUpdate = toProfileUpdate;
         this.toUser = toUser;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -112,6 +118,23 @@ public class UserService{
 
     }
 
+
+    public ResponseEntity<?> updatePassword(ChangePasswordDTO changePasswordDTO, Long userId){
+        Users currentUser = userRepository.findById(userId).get();
+        if(Objects.nonNull(changePasswordDTO.getPassword())&& !"".equalsIgnoreCase(changePasswordDTO.getPassword())){
+
+        }
+        if(passwordEncoder.matches(changePasswordDTO.getPassword(), currentUser.getPassword())){
+            BCryptPasswordEncoder passwordEncoder1 = new BCryptPasswordEncoder();
+            String encodePassword = passwordEncoder1.encode(changePasswordDTO.getNewPassword());
+            currentUser.setPassword(encodePassword);
+            userRepository.save(currentUser);
+            return new ResponseEntity<>("Your password was changed successfully!", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Your password is wrong! Please put your correct password",HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 

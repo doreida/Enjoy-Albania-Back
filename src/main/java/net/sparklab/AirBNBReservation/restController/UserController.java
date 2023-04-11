@@ -1,6 +1,7 @@
 package net.sparklab.AirBNBReservation.restController;
 
 import lombok.RequiredArgsConstructor;
+import net.sparklab.AirBNBReservation.dto.ChangePasswordDTO;
 import net.sparklab.AirBNBReservation.dto.ProfileUpdateDTO;
 import net.sparklab.AirBNBReservation.dto.ResetpasswordDTO;
 import net.sparklab.AirBNBReservation.services.UserService;
@@ -33,10 +34,15 @@ private final UserService userService;
     public Object updateUser(@ModelAttribute ProfileUpdateDTO profileUpdateDTO){
         return userService.updateUser(profileUpdateDTO);
     }
+    @PostMapping("/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(@RequestBody ChangePasswordDTO changePasswordDTO, @PathVariable("id") Long id){
+        return userService.updatePassword(changePasswordDTO, id);
+    }
 
     @GetMapping("user/{id}")
     public ProfileUpdateDTO findUserById(@PathVariable String id){
         return userService.findById(id);
     }
+
 
 }
