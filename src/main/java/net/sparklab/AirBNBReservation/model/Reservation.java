@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
 @Entity
@@ -27,6 +29,7 @@ public class Reservation extends BaseEntity{
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate bookedDate;
+    private Long anticipation;
     private int noNights;
     private Currency currency;
     private BigDecimal earning;
@@ -46,5 +49,7 @@ public class Reservation extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "source_id",referencedColumnName = "id",nullable = true)
     private Source source;
+
+
 
 }

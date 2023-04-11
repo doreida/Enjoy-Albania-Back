@@ -22,13 +22,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 import java.util.Optional;
 
 @Component
 @AllArgsConstructor
 public class ReservationDTOToReservation implements Converter<ReservationDTO, Reservation> {
-
     private final GuestDTOtoGuest guestDTOtoGuest;
     private final GuestRepository guestRepository;
     private final ReservationRepository reservationRepository;
@@ -158,9 +158,11 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             else{
                 reservation.setSource(sourcefind);
             }
+          reservation.setAnticipation(reservation.getBookedDate().until(reservation.getStartDate(), ChronoUnit.DAYS));
 
             return reservation;
         }
         return null;
     }
+
 }
