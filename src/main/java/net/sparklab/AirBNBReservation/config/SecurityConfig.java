@@ -91,7 +91,7 @@ public class SecurityConfig {
                 .antMatchers("/enjoyAlbania/enjoyAlbania/reservation/**").hasAnyAuthority( "ADMIN")
                 .antMatchers("/enjoyAlbania/auth/**").permitAll()
                 .antMatchers("/enjoyAlbania/user/forgotPassword/**").permitAll()
-                .antMatchers("/enjoyAlbania/user/updatePassword/**").permitAll()
+                .antMatchers("/enjoyAlbania/user/updatePassword/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
