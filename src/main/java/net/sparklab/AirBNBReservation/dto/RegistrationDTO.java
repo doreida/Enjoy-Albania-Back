@@ -16,7 +16,6 @@ public class RegistrationDTO {
     private String surname;
     private String phone;
     private String email;
-    private String username;
     private String role;
     private Boolean isEnabled=false;
 

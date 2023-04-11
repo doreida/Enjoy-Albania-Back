@@ -12,6 +12,7 @@ public class FilterDTO {
     String earningMin;
     String earningMax;
     int pageSize;
+    int pageNo;
     Boolean createdDate = false;
     Boolean bookedDate = false;
     Boolean startDate = false;

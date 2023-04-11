@@ -73,7 +73,7 @@ public class SecurityConfig {
                         .collect(Collectors.toList())
         );
     }
-    @Bean
+     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and()
@@ -85,13 +85,16 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/enjoyAlbania/registration").permitAll()
-                .antMatchers("/enjoyAlbania/user/resetPassword/**").permitAll()
+                .antMatchers("/enjoyAlbania/forgotPassword/**").permitAll()
+                .antMatchers("/enjoyAlbania/resetPassword/**").permitAll()
                 .antMatchers("/enjoyAlbania/savepassword/**").permitAll()
                 .antMatchers("/enjoyAlbania/guest/**").hasAnyAuthority( "ADMIN")
-                .antMatchers("/enjoyAlbania/enjoyAlbania/reservation/**").hasAnyAuthority( "ADMIN")
+                .antMatchers("/enjoyAlbania/reservation/**").hasAnyAuthority( "ADMIN")
                 .antMatchers("/enjoyAlbania/auth/**").permitAll()
+
                 .antMatchers("/enjoyAlbania/user/forgotPassword/**").permitAll()
                 .antMatchers("/enjoyAlbania/user/updatePassword/**").hasAuthority("ADMIN")
+
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -104,7 +107,7 @@ public class SecurityConfig {
                     response.setStatus(HttpStatus.FORBIDDEN.value());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{ \"message\": \"You are not authorized to access this resource.\" }");
+                    response.getWriter().write("{ \"  message\": \"You are not authorized to access this resource.\" }");
                 })
                 .and()
 

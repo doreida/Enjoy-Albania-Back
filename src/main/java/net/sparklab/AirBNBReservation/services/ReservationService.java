@@ -13,6 +13,8 @@ import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
 import net.sparklab.AirBNBReservation.model.Guest;
 import net.sparklab.AirBNBReservation.model.Reservation;
+import net.sparklab.AirBNBReservation.model.Source;
+import net.sparklab.AirBNBReservation.repositories.SourceRepository;
 import net.sparklab.AirBNBReservation.specifications.ReservationSpecification;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
@@ -37,6 +39,7 @@ public class ReservationService {
     public final ReservationDTOToReservation toReservation;
     public final FilterDTOToReservation filterDTOToReservation;
     public final GuestRepository guestRepository;
+    private final SourceRepository sourceRepository;
 
 
     public Page<ReservationDTO> findAll(FilterDTO filterDTO){
@@ -45,52 +48,54 @@ public class ReservationService {
         if (filterDTO.getSortDir().equalsIgnoreCase("asc")) {
             sort = Sort.by(filterDTO.getSortBy()).ascending();
         }
-        Pageable pageable = PageRequest.of(0, filterDTO.getPageSize(), sort);
+
+        Pageable pageable = PageRequest.of(filterDTO.getPageNo(), filterDTO.getPageSize(), sort);
 
         Reservation filter = filterDTOToReservation.convert(filterDTO);
 
         ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
 
-        List<ReservationDTO> reservationDTOList = reservationRepository.findAll(specification,pageable).stream().map(reservation ->
-                toReservationDTO.convert(reservation)).collect(Collectors.toList());
+        Page<Reservation> reservationsPage = reservationRepository.findAll(specification, pageable);
 
-        int total = reservationDTOList.size();
-        int offset = (int) pageable.getOffset();
+        return new PageImpl<>(reservationsPage.stream().map(toReservationDTO::convert).collect(Collectors.toList()), pageable, reservationsPage.getTotalElements());
 
-        List<ReservationDTO> content = reservationDTOList.subList(offset, Math.min(offset + filterDTO.getPageSize(), total));
-
-        Page<ReservationDTO> reservationDTOPage = new PageImpl<>(content, pageable, reservationDTOList.size());
-
-        return reservationDTOPage;
     }
 
 
     public ResponseEntity<?> uploadData(MultipartFile file) throws IOException {
-
         InputStream inputStream = file.getInputStream();
         Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
-        CsvToBean<ReservationDTO> csvToBean = new CsvToBeanBuilder(reader)
-                .withType(ReservationDTO.class)
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
+        try {
+            CsvToBean<ReservationDTO> csvToBean = new CsvToBeanBuilder(reader)
+                    .withType(ReservationDTO.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
 
-        List<ReservationDTO> reservations = csvToBean.parse();
+            List<ReservationDTO> reservations = csvToBean.parse();
 
-        List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO))
-                .filter(reservation -> reservation!=null).collect(Collectors.toList());
 
-        List<Guest> guestList = reservationList.stream().map(reservation -> reservation.getGuest()).collect(Collectors.toList());
+             Source source=sourceRepository.findSourcesBySource("AirBNBReservation");
+            List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO))
+                    .filter(reservation -> reservation != null).collect(Collectors.toList());
 
-        if (guestList.size()!=0){
-            guestRepository.saveAll(guestList);
+            List<Guest> guestList = reservationList.stream().map(reservation -> reservation.getGuest()).collect(Collectors.toList());
+
+            if (guestList.size() != 0) {
+                guestRepository.saveAll(guestList);
+            }
+            if (reservationList.size() != 0) {
+                reservationRepository.saveAll(reservationList);
+            }
+            reader.close();
+            inputStream.close();
+            return new ResponseEntity<>("Reservations saved: " + reservationList.size(), HttpStatus.OK);
+
+        }catch (Exception e){
+            reader.close();
+            inputStream.close();
+            return new ResponseEntity<>("Error uploading the file",HttpStatus.BAD_REQUEST);
         }
-        if (reservationList.size()!=0) {
-            reservationRepository.saveAll(reservationList);
-        }
-        reader.close();
-        inputStream.close();
-        return new ResponseEntity<>("Reservations saved: " + reservationList.size(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> saveOrUpdate(ReservationDTO reservationDTO) {
@@ -109,7 +114,8 @@ public class ReservationService {
             }
         } catch (NotValidFileException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return new ResponseEntity<>("Record not saved with error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -122,7 +128,7 @@ public class ReservationService {
             throw new NumberFormatException("Id: " + id + " cannot be parsed");
         }
         reservationRepository.deleteById(parseId);
-        return new ResponseEntity("Task deleted", HttpStatus.OK);
+        return new ResponseEntity("Reservation deleted", HttpStatus.OK);
     }
 
 
@@ -133,7 +139,7 @@ public class ReservationService {
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Reservation id: \"" + id + "\" can't be parsed!");
         }
-        return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " notfound!")));
+        return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " not found!")));
 
     }
 }

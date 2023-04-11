@@ -45,30 +45,25 @@ public class RegistrationService {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByUsername(registrationDTO.getUsername())== TRUE)
-        {  //throw new IllegalStateException("username already taken");
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
 
-        }
         else{
             usertoSave.setName(registrationDTO.getName());
             usertoSave.setSurname(registrationDTO.getSurname());
             usertoSave.setPhone(registrationDTO.getPhone());
             usertoSave.setEmail(registrationDTO.getEmail());
-            usertoSave.setUsername(registrationDTO.getUsername());
             usertoSave.setConfirmationToken(generateConfirmationToken());
             usertoSave.setTokenCreationDate(LocalDateTime.now());
             usertoSave.setRole(Role.valueOf(registrationDTO.getRole()));
             usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
 
        try {
-           String link="http://localhost:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
+           String link="http://192.168.10.12:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
            emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
            userRepository.save(usertoSave);
        }
 
        catch (Exception e){
-            return new ResponseEntity<>("The verification email could not be sent successfully. Please enter a proper email address", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The verification email could not be sent successfully.Please check the given  email address", HttpStatus.BAD_REQUEST);
        }
 
               return new ResponseEntity<>(usertoSave.getConfirmationToken(),HttpStatus.OK);

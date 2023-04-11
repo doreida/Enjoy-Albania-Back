@@ -1,7 +1,9 @@
 package net.sparklab.AirBNBReservation.data;
 
 import net.sparklab.AirBNBReservation.model.Role;
+import net.sparklab.AirBNBReservation.model.Source;
 import net.sparklab.AirBNBReservation.model.Users;
+import net.sparklab.AirBNBReservation.repositories.SourceRepository;
 import net.sparklab.AirBNBReservation.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,13 +14,15 @@ import org.springframework.stereotype.Component;
 public class LoadData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final SourceRepository sourceRepository;
 
 
 
-    public LoadData( BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository) {
+    public LoadData(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository, SourceRepository sourceRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
+        this.sourceRepository = sourceRepository;
     }
 
 
@@ -29,7 +33,6 @@ public class LoadData implements CommandLineRunner {
             userAdmin.setEmail("admin@gmail.com");
             userAdmin.setName("Admin");
             userAdmin.setSurname("Admin");
-            userAdmin.setUsername("admin");
             String encodedPassword = bCryptPasswordEncoder.encode("admin");
             userAdmin.setPassword(encodedPassword);
             userAdmin.setRole(Role.ADMIN);
@@ -40,7 +43,6 @@ public class LoadData implements CommandLineRunner {
             user.setEmail("user@gmail.com");
             user.setName("user");
             user.setSurname("user");
-            user.setUsername("user");
             String passwordEncode = bCryptPasswordEncoder.encode("user");
             user.setPassword(passwordEncode);
             user.setRole(Role.USER);
@@ -48,11 +50,24 @@ public class LoadData implements CommandLineRunner {
 
             userRepository.save(user);
 
+
         }
     }
 
+    public void saveSource(){
+        if (sourceRepository.count() == 0)
+
+        {
+            Source source=new Source();
+            source.setSource("AirBNBReservation");
+            sourceRepository.save(source);
+        }
+
+    }
     @Override
     public void run(String... args) throws Exception {
         saveUsers();
+        saveSource();
+
     }
 }

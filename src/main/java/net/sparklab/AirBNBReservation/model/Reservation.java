@@ -28,12 +28,23 @@ public class Reservation extends BaseEntity{
     private LocalDate endDate;
     private LocalDate bookedDate;
     private int noNights;
-    private String listing;
     private Currency currency;
     private BigDecimal earning;
 
     @ManyToOne
     @JoinColumn(name = "guest_id",referencedColumnName = "id", nullable = false)
     private Guest guest;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "listing_id",referencedColumnName = "id", nullable = false)
+    private Listing listing;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "source_id",referencedColumnName = "id",nullable = true)
+    private Source source;
 
 }
