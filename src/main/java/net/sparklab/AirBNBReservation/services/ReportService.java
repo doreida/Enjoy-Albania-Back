@@ -39,10 +39,21 @@ public class ReportService {
 
 
 
+    public OptionalDouble avgLength_Stay(List<Reservation> reservations){
+
+        OptionalDouble avg_Stay= reservations.stream().mapToDouble(Reservation::getNoNights).average();
+        return avg_Stay;
+    }
 
 
+public double percentage_reservation_with_children(List<Reservation> reservations){
 
+     int listlength=reservations.size();
 
+    long listwithchildren=reservations.stream().filter(reservation -> reservation.getNoChildren()>0).count();
 
+     double percentage=(double)listwithchildren/listlength*100;
+    return percentage;
+}
 
 }
