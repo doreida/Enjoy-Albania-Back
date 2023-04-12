@@ -152,6 +152,7 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAll(specification);
         ReportDTO reportDTO=new ReportDTO();
         reportDTO.setAvg_Guest(reportService.avgGuests(reservations));
+        reportDTO.setAvg_Anticipation(reportService.avgAnticipation(reservations));
         return reportDTO;
     }
 

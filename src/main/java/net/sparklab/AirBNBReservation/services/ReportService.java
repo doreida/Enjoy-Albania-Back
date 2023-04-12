@@ -37,6 +37,11 @@ public class ReportService {
 
     }
 
+    public OptionalDouble avgAnticipation(List<Reservation> reservations){
+        OptionalDouble avgAnticipation = reservations.stream().mapToDouble(Reservation::getAnticipation).average();
+        return avgAnticipation;
+    }
+
 
 
 

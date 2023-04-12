@@ -11,7 +11,7 @@ public class ReportDTO {
 
  private OptionalDouble avg_Guest;
 
- private double avg_Anticipation;
+ private OptionalDouble avg_Anticipation;
 
  private double  percentage_of_reservations_with_children;
 
