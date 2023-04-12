@@ -51,14 +51,21 @@ public class ReportService {
     }
 
 
-public double percentage_reservation_with_children(List<Reservation> reservations){
+    public double percentage_reservation_with_children(List<Reservation> reservations){
 
-     int listlength=reservations.size();
+      int listlength=reservations.size();
+      long listwithchildren=reservations.stream().filter(reservation -> reservation.getNoChildren()>0).count();
+      double percentage=(double)listwithchildren/listlength*100;
 
-    long listwithchildren=reservations.stream().filter(reservation -> reservation.getNoChildren()>0).count();
+      return percentage;
+    }
 
-     double percentage=(double)listwithchildren/listlength*100;
-    return percentage;
-}
+    public double percentageOfReservationsWithInfants(List<Reservation> reservations){
+        int listLength = reservations.size();
+        long listWithInfants = reservations.stream().filter(reservation -> reservation.getNoInfants()>0).count();
+        double percentage = (double)listWithInfants/listLength*100;
+        return percentage;
+    }
+
 
 }

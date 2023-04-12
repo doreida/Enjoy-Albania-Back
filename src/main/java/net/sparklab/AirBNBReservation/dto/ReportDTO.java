@@ -15,7 +15,7 @@ public class ReportDTO {
 
  private String  percentage_of_reservations_with_children;
 
- private double percentage_of_reservations_with_infants;
+ private String percentage_of_reservations_with_infants;
 
  private double percentage_of_occupancy_listing_between_dates;
 
