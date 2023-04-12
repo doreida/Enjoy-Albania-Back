@@ -33,6 +33,8 @@ public class ReservationDTO {
     private int nrNights;
     @CsvBindByName(column = "Booked")
     private String bookedDate;
+    @CsvBindByName(column = "Anticipation")
+    private Long anticipation ;
     @CsvBindByName(column = "Listing")
     private String listing;
     @CsvBindByName(column = "Earnings")
