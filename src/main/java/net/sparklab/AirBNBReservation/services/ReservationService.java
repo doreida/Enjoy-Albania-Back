@@ -8,6 +8,7 @@ import net.sparklab.AirBNBReservation.converters.FilterDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
+import net.sparklab.AirBNBReservation.dto.ReportDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
@@ -40,7 +41,7 @@ public class ReservationService {
     public final FilterDTOToReservation filterDTOToReservation;
     public final GuestRepository guestRepository;
     private final SourceRepository sourceRepository;
-
+    private final ReportService reportService;
 
     public Page<ReservationDTO> findAll(FilterDTO filterDTO){
 
@@ -142,4 +143,19 @@ public class ReservationService {
         return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " not found!")));
 
     }
+
+    public ReportDTO findReport(FilterDTO filterDTO) {
+
+
+        Reservation filter = filterDTOToReservation.convert(filterDTO);
+        ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
+        List<Reservation> reservations = reservationRepository.findAll(specification);
+        ReportDTO reportDTO=new ReportDTO();
+        reportDTO.setAvg_Guest(reportService.avgGuests(reservations));
+        return reportDTO;
+    }
+
+
+
+
 }

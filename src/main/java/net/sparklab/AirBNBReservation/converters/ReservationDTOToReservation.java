@@ -158,8 +158,8 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             else{
                 reservation.setSource(sourcefind);
             }
-          reservation.setAnticipation(reservation.getBookedDate().until(reservation.getStartDate(), ChronoUnit.DAYS));
-
+            reservation.setAnticipation(reservation.getBookedDate().until(reservation.getStartDate(), ChronoUnit.DAYS));
+            reservation.setNoGuests(reservation.getNoAdults()+ reservation.getNoChildren()+ reservation.getNoInfants());
             return reservation;
         }
         return null;
