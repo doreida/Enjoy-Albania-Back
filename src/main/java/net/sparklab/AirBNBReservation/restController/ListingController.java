@@ -24,17 +24,13 @@ public class ListingController {
         return listingService.findAll();
     }
 
-
     @GetMapping("{id}")
     public ListingDTO findListingById(@PathVariable String id){
         return listingService.findById(id);
     }
 
-
     @PostMapping
     public ResponseEntity<?> saveOrUpdate(@RequestBody ListingDTO listingDTO){
         return listingService.saveOrUpdate(listingDTO);
     }
-
-
 }
