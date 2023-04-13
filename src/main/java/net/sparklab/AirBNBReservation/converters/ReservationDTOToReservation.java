@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Currency;
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -135,7 +134,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 reservation.setGuest(guest);
             }
 
-          Listing listing=listingRepository.findByListing(source.getListing());
+            Listing listing=listingRepository.findByListing(source.getListing());
             if(listing ==null){
                 Listing savelisting =new Listing();
                  savelisting.setListing(source.getListing());
@@ -145,18 +144,19 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             else{
             reservation.setListing(listing);
             }
-            Source sourcefind= sourceRepository.findSourcesBySource(source.getSource());
+
+            Source sourceFind= sourceRepository.findSourcesBySource(source.getSource());
             if(source.getSource()==null){
                 reservation.setSource(sourceRepository.findSourcesBySource("AirBNBReservation"));
             }
-           else if(sourcefind==null){
-                Source sourcesave= new Source();
-                sourcesave.setSource(source.getSource());
-                sourceRepository.save(sourcesave);
-                reservation.setSource(sourcesave);
+            else if(sourceFind==null){
+                Source sourceToSave = new Source();
+                sourceToSave.setSource(source.getSource());
+                sourceRepository.save(sourceToSave);
+                reservation.setSource(sourceToSave);
             }
             else{
-                reservation.setSource(sourcefind);
+                reservation.setSource(sourceFind);
             }
 
             return reservation;

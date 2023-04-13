@@ -75,9 +75,12 @@ public class ReservationService {
             List<ReservationDTO> reservations = csvToBean.parse();
 
 
-             Source source=sourceRepository.findSourcesBySource("AirBNBReservation");
-            List<Reservation> reservationList = reservations.stream().map(reservationDTO -> toReservation.convert(reservationDTO))
-                    .filter(reservation -> reservation != null).collect(Collectors.toList());
+             Source source = sourceRepository.findSourcesBySource("AirBNBReservation");
+            List<Reservation> reservationList = reservations.stream()
+                    .map(reservationDTO -> toReservation.convert(reservationDTO))
+                    .filter(reservation -> reservation != null)
+                    .peek(reservation -> reservation.setSource(source))
+                    .collect(Collectors.toList());
 
             List<Guest> guestList = reservationList.stream().map(reservation -> reservation.getGuest()).collect(Collectors.toList());
 

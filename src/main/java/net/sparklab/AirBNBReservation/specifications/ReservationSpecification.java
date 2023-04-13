@@ -76,8 +76,9 @@ public class ReservationSpecification implements Specification<Reservation> {
         if (filter.getConfirmationCode()!=null){
             predicates.add(cb.like(root.get("confirmationCode"), "%" + filter.getConfirmationCode() + "%"));
         }
-        if (filter.getListing()!=null){
-            predicates.add(cb.like(root.get("listing"), "%" + filter.getListing() + "%"));
+
+        if (filterDTO.getListing()!=null){
+            predicates.add(cb.like(root.join("listing").get("listing"), "%" + filterDTO.getListing() + "%"));
         }
 
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
