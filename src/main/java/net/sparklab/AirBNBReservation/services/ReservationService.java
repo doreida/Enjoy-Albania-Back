@@ -147,14 +147,14 @@ public class ReservationService {
 
     }
 
-    public ReportDTO findReport(FilterDTO filterDTO) {
+    public ResponseEntity<?> findReport(FilterDTO filterDTO) {
 
 
         Reservation filter = filterDTOToReservation.convert(filterDTO);
         ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
         List<Reservation> reservations = reservationRepository.findAll(specification);
         if(reservations.size()<=0){
-            throw new NoSuchElementException("There is no reservation with those specifications.Please enter other specifications ");
+            return new ResponseEntity<>("There is no reservation with those specifications.Please enter other specifications ",HttpStatus.BAD_REQUEST);
         }
         ReportDTO reportDTO=new ReportDTO();
         reportDTO.setAvg_Guest(reportService.avgGuests(reservations)+" guests");
@@ -166,7 +166,7 @@ public class ReservationService {
         {
             reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");}
 
-        return reportDTO;
+        return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
 
 

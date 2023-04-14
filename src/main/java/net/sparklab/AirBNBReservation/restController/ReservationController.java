@@ -51,7 +51,7 @@ public class ReservationController {
 
 
     @GetMapping("/reports")
-     public ReportDTO findReport(@ModelAttribute FilterDTO filterDTO){
+     public ResponseEntity<?> findReport(@ModelAttribute FilterDTO filterDTO){
 
         return reservationService.findReport(filterDTO);
      }
