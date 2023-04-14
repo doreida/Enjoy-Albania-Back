@@ -30,6 +30,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -152,6 +153,9 @@ public class ReservationService {
         Reservation filter = filterDTOToReservation.convert(filterDTO);
         ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
         List<Reservation> reservations = reservationRepository.findAll(specification);
+        if(reservations.size()<=0){
+            throw new NoSuchElementException("There is no reservation with those specifications.Please enter other specifications ");
+        }
         ReportDTO reportDTO=new ReportDTO();
         reportDTO.setAvg_Guest(reportService.avgGuests(reservations)+" guests");
         reportDTO.setAvg_Anticipation(reportService.avgAnticipation(reservations)+" days");
@@ -161,6 +165,7 @@ public class ReservationService {
         if(filterDTO.getListing()!=null)
         {
             reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");}
+
         return reportDTO;
     }
 
