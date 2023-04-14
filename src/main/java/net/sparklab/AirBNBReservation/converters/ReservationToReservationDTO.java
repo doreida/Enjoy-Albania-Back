@@ -50,6 +50,7 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setNrInfants(source.getNoInfants());
             reservationDTO.setNrNights(source.getNoNights());
 
+
             if (source.getGuest().getStatus()!=null) {
                 reservationDTO.setStatus(source.getGuest().getStatus().toString());
             }
