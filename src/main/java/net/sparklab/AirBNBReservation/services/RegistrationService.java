@@ -88,7 +88,9 @@ public class RegistrationService {
             }
             LocalDateTime expiredAt = userToUpdatePassword.getTokenCreationDate().plusHours(24);
             if (expiredAt.isBefore(LocalDateTime.now())) {
+                userRepository.deleteById(userToUpdatePassword.getId());
                 return "The verification link has expired.";
+
                 //TODO delete user after24h fromdb
             }
         }
