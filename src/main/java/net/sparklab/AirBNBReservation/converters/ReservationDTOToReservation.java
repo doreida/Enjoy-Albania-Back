@@ -39,6 +39,8 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
     public Reservation convert(ReservationDTO source) {
 
         if (source!=null){
+
+            //Return null if another reservation with the same confirmation code exists
             if (reservationRepository.existsByConfirmationCode(source.getConfirmationCode()) && source.getId() == null){
                 return null;
             }
@@ -48,6 +50,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             if (source.getId()!=null){
                 reservation.setId(source.getId());
             }
+
             //Earning from string to Currency and Decimal
             String earning ;
 
@@ -113,7 +116,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             reservation.setNoChildren(source.getNrChildren());
             reservation.setConfirmationCode(source.getConfirmationCode());
 
-            //Splitting Full name of the Guest and finding if an Guest Record exist, if not create a new guest
+            //Splitting Full name of the Guest and finding if a Guest Record exist, if not create a new guest
             String fullName = source.getGuestName();
             String[] nameParts = fullName.split(" ");
 

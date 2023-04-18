@@ -15,7 +15,6 @@ import java.util.List;
 public class GuestController {
 
     private final GuestService guestService;
-    private final GuestRepository guestRepository;
     @GetMapping("/{id}")
     public GuestDTO findGuestById(@PathVariable String id){
         return guestService.findById(id);
