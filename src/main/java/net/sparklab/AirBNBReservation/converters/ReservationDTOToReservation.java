@@ -61,6 +61,7 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 earning = source.getEarning().replace("€","").replace(",","").substring(1);
                 reservation.setEarning(new BigDecimal(earning));
             }
+
             reservation.setCurrency(Currency.getInstance("EUR"));
 
 
@@ -160,8 +161,8 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             else{
                 reservation.setSource(sourceFind);
             }
-           reservation.setAnticipation(reservation.getBookedDate().until(reservation.getStartDate(), ChronoUnit.DAYS));
-
+            reservation.setAnticipation(reservation.getBookedDate().until(reservation.getStartDate(), ChronoUnit.DAYS));
+            reservation.setNoGuests(reservation.getNoAdults()+ reservation.getNoChildren()+ reservation.getNoInfants());
             return reservation;
         }
         return null;

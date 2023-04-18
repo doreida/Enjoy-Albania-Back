@@ -33,6 +33,7 @@ public class Reservation extends BaseEntity{
     private int noNights;
     private Currency currency;
     private BigDecimal earning;
+    private int noGuests;
 
     @ManyToOne
     @JoinColumn(name = "guest_id",referencedColumnName = "id", nullable = false)

@@ -51,6 +51,7 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setAnticipation(source.getAnticipation());
             reservationDTO.setSource(source.getSource().getSource());
 
+
             if (source.getGuest().getStatus()!=null) {
                 reservationDTO.setStatus(source.getGuest().getStatus().toString());
             }

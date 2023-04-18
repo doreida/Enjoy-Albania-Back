@@ -8,6 +8,7 @@ import net.sparklab.AirBNBReservation.converters.FilterDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationDTOToReservation;
 import net.sparklab.AirBNBReservation.converters.ReservationToReservationDTO;
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
+import net.sparklab.AirBNBReservation.dto.ReportDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
 import net.sparklab.AirBNBReservation.exceptions.NotFoundException;
 import net.sparklab.AirBNBReservation.exceptions.NotValidFileException;
@@ -26,7 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -40,7 +44,7 @@ public class ReservationService {
     public final FilterDTOToReservation filterDTOToReservation;
     public final GuestRepository guestRepository;
     private final SourceRepository sourceRepository;
-
+    private final ReportService reportService;
 
     public Page<ReservationDTO> findAll(FilterDTO filterDTO){
 
@@ -145,4 +149,30 @@ public class ReservationService {
         return toReservationDTO.convert(reservationRepository.findById(parseId).orElseThrow(() -> new NotFoundException("Record with id: " + id + " not found!")));
 
     }
+
+    public ResponseEntity<?> findReport(FilterDTO filterDTO) {
+
+
+        Reservation filter = filterDTOToReservation.convert(filterDTO);
+        ReservationSpecification specification = new ReservationSpecification(filterDTO,filter);
+        List<Reservation> reservations = reservationRepository.findAll(specification);
+        if(reservations.size()<=0){
+            return new ResponseEntity<>("There is no reservation with those specifications.Please enter other specifications ",HttpStatus.BAD_REQUEST);
+        }
+        ReportDTO reportDTO=new ReportDTO();
+        reportDTO.setAvg_Guest(reportService.avgGuests(reservations)+" guests");
+        reportDTO.setAvg_Anticipation(reportService.avgAnticipation(reservations)+" days");
+        reportDTO.setAvg_Length_Stay(reportService.avgLength_Stay(reservations)+" days");
+        reportDTO.setPercentage_of_reservations_with_children(reportService.percentage_reservation_with_children(reservations)+"%");
+        reportDTO.setPercentage_of_reservations_with_infants(reportService.percentageOfReservationsWithInfants(reservations)+"%");
+        if(filterDTO.getListing()!=null)
+        {
+            reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");}
+
+        return new ResponseEntity(reportDTO,HttpStatus.OK);
+    }
+
+
+
+
 }
