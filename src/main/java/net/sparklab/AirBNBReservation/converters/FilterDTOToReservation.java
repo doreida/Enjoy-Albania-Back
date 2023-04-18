@@ -34,7 +34,6 @@ public class FilterDTOToReservation implements Converter<FilterDTO, Reservation>
                 String firstName = nameParts[0];
                 String lastName = "";
 
-
                 if (nameParts.length!=1) {
                     lastName = fullName.replace(firstName + " ", "");
                 }
