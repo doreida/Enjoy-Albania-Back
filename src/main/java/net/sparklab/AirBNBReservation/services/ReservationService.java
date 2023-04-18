@@ -75,7 +75,7 @@ public class ReservationService {
             List<ReservationDTO> reservations = csvToBean.parse();
 
 
-             Source source = sourceRepository.findSourcesBySource("AirBNBReservation");
+            Source source = sourceRepository.findSourcesBySource("AirBNBReservation");
             List<Reservation> reservationList = reservations.stream()
                     .map(reservationDTO -> toReservation.convert(reservationDTO))
                     .filter(reservation -> reservation != null)
@@ -131,7 +131,7 @@ public class ReservationService {
             throw new NumberFormatException("Id: " + id + " cannot be parsed");
         }
         reservationRepository.deleteById(parseId);
-        return new ResponseEntity("Reservation deleted", HttpStatus.OK);
+        return new ResponseEntity<>("Reservation deleted", HttpStatus.OK);
     }
 
 

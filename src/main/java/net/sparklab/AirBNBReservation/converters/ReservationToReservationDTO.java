@@ -6,10 +6,9 @@ import net.sparklab.AirBNBReservation.model.Reservation;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
+
 import java.util.Locale;
 
 
@@ -50,6 +49,7 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setNrInfants(source.getNoInfants());
             reservationDTO.setNrNights(source.getNoNights());
             reservationDTO.setAnticipation(source.getAnticipation());
+            reservationDTO.setSource(source.getSource().getSource());
 
             if (source.getGuest().getStatus()!=null) {
                 reservationDTO.setStatus(source.getGuest().getStatus().toString());
@@ -57,7 +57,6 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
 
             return reservationDTO;
         }
-
         return null;
     }
 }

@@ -13,11 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfileUpdateDTOToUser implements Converter<ProfileUpdateDTO, Users> {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public ProfileUpdateDTOToUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ProfileUpdateDTOToUser(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @SneakyThrows
