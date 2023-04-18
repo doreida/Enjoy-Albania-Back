@@ -26,15 +26,10 @@ public class ListingService {
     }
 
     public List<ListingDTO> findAll() {
-
         return listingRepository.findAll().stream().map(listing -> toListingDTO.convert(listing)).collect(Collectors.toList());
-
     }
 
-
-
     public ListingDTO findById(String id) {
-
         Long parseId;
         try {
             parseId = Long.parseLong(id);
@@ -43,7 +38,6 @@ public class ListingService {
         }
         return toListingDTO.convert(listingRepository.findById(parseId).orElseThrow(()-> new NotFoundException("Record with id: "+ id +"not found!")));
     }
-
 
     public ResponseEntity<?> saveOrUpdate(ListingDTO listingDTO) {
         try{
@@ -62,9 +56,6 @@ public class ListingService {
         {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-
-
     }
 }
 

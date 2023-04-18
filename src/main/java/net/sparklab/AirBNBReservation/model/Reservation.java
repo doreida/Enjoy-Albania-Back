@@ -39,13 +39,9 @@ public class Reservation extends BaseEntity{
     @JoinColumn(name = "guest_id",referencedColumnName = "id", nullable = false)
     private Guest guest;
 
-
-
     @ManyToOne
     @JoinColumn(name = "listing_id",referencedColumnName = "id", nullable = false)
     private Listing listing;
-
-
 
     @ManyToOne
     @JoinColumn(name = "source_id",referencedColumnName = "id",nullable = true)
