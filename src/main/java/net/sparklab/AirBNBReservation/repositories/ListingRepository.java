@@ -4,6 +4,8 @@ import net.sparklab.AirBNBReservation.model.Listing;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ListingRepository extends JpaRepository<Listing, Long> {
 
 
@@ -11,4 +13,9 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
 
 
  boolean existsByListing(String listing);
+
+List<Listing> findAllByListingContaining(String listing);
+
+
+
 }

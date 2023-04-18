@@ -3,7 +3,9 @@ package net.sparklab.AirBNBReservation.restController;
 
 import lombok.AllArgsConstructor;
 import net.sparklab.AirBNBReservation.dto.FilterDTO;
+import net.sparklab.AirBNBReservation.dto.ReportDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
+import net.sparklab.AirBNBReservation.services.ReportService;
 import net.sparklab.AirBNBReservation.services.ReservationService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final ReportService reportService;
 
     @PostMapping("/uploadFile")
     public ResponseEntity<?> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
@@ -43,4 +46,18 @@ public class ReservationController {
     public ResponseEntity<?> delete(@PathVariable String id){
         return reservationService.delete(id);
     }
+
+
+
+
+    @GetMapping("/reports")
+     public ResponseEntity<?> findReport(@ModelAttribute FilterDTO filterDTO){
+
+        return reservationService.findReport(filterDTO);
+     }
+
+
+
+
+
 }
