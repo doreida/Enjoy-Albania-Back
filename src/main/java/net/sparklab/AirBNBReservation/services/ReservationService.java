@@ -165,9 +165,10 @@ public class ReservationService {
         reportDTO.setAvg_Length_Stay(reportService.avgLength_Stay(reservations)+" days");
         reportDTO.setPercentage_of_reservations_with_children(reportService.percentage_reservation_with_children(reservations)+"%");
         reportDTO.setPercentage_of_reservations_with_infants(reportService.percentageOfReservationsWithInfants(reservations)+"%");
-        if(filterDTO.getListing()!=null)
+        if(filterDTO.getListing()!=null&& filterDTO.getStart()!=null&& filterDTO.getEnd()!=null)
         {
-            reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");}
+            reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");
+        }
 
         return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
