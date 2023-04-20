@@ -110,18 +110,13 @@ public class UserService{
     @Transactional
     public ResponseEntity<?> updateUser(ProfileUpdateDTO profileUpdateDTO) {
         try {
-            if(userRepository.existsByEmail(profileUpdateDTO.getEmail())== TRUE)
-            {
-                return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
-            }
+
             Users user = userRepository.save(toUser.convert(profileUpdateDTO));
             return new ResponseEntity<>("User details are updated sucesfully",HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>("User details are not updated",HttpStatus.BAD_REQUEST);
         }
-
-
     }
 
 

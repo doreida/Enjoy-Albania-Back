@@ -29,7 +29,6 @@ public class ReservationToReservationDTO implements Converter<Reservation, Reser
             reservationDTO.setStartDate(source.getStartDate().toString());
             reservationDTO.setBookedDate(source.getBookedDate().toString());
 
-
             Locale germanLocale = new Locale("de", "DE");
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(germanLocale);
             symbols.setDecimalSeparator('.');

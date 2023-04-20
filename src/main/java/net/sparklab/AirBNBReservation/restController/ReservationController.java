@@ -37,6 +37,11 @@ public class ReservationController {
         return reservationService.findAll(filterDto);
     }
 
+    @GetMapping("/findAllCalendar")
+    public List<ReservationDTO> findAll(){
+        return reservationService.findAllCalendar();
+    }
+
     @GetMapping("/{id}")
     public ReservationDTO findById( @PathVariable String id){
         return reservationService.findById(id);

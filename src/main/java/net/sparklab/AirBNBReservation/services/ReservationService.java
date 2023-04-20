@@ -172,4 +172,10 @@ public class ReservationService {
 
         return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
+
+    public List<ReservationDTO> findAllCalendar() {
+
+       return  reservationRepository.findAll().stream().map(reservation -> toReservationDTO.convert(reservation)).collect(Collectors.toList());
+
+    }
 }
