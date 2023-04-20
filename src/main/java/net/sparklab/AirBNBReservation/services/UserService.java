@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.lang.Boolean.TRUE;
+
 @Service
 public class UserService{
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 60;
@@ -108,6 +110,10 @@ public class UserService{
     @Transactional
     public ResponseEntity<?> updateUser(ProfileUpdateDTO profileUpdateDTO) {
         try {
+            if(userRepository.existsByEmail(profileUpdateDTO.getEmail())== TRUE)
+            {
+                return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+            }
             Users user = userRepository.save(toUser.convert(profileUpdateDTO));
             return new ResponseEntity<>("User details are updated sucesfully",HttpStatus.OK);
         }
