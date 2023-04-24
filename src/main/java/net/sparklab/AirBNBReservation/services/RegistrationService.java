@@ -57,7 +57,7 @@ public class RegistrationService {
             usertoSave.setPassword(bCryptPasswordEncoder.encode(primary_password));
 
        try {
-           String link="http://192.168.10.12:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
+           String link="http://192.168.10.55:3000/enjoyAlbania/registration/"+usertoSave.getConfirmationToken();
            emailService.send(registrationDTO.getEmail(),emailService.buildEmail(registrationDTO.getName(),link));
            userRepository.save(usertoSave);
        }
