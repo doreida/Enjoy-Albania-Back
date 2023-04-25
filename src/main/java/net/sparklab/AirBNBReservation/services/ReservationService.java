@@ -169,7 +169,15 @@ public class ReservationService {
         {
             reportDTO.setPercentage_of_occupancy_listing_between_dates(reportService.percentageOfOccupancyPerListingAndDates(reservations, LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu")),LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu")),filterDTO.getListing())+"%");
         }
-
+        reportDTO.setConfirmationCode(filterDTO.getConfirmationCode());
+        reportDTO.setContact(filterDTO.getContact());
+        reportDTO.setListing(filterDTO.getListing());
+        reportDTO.setEarningMax(filterDTO.getEarningMax());
+        reportDTO.setEarningMin(filterDTO.getEarningMin());
+        reportDTO.setStart(filterDTO.getStart());
+        reportDTO.setEnd(filterDTO.getEnd());
+        reportDTO.setGuestName(filterDTO.getGuestName());
+        reportDTO.setStatus(filterDTO.getStatus());
         return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
 

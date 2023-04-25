@@ -19,6 +19,21 @@ public class ReportDTO {
 
  private String percentage_of_occupancy_listing_between_dates;
 
+ private String start;
 
+ private  String end;
 
+ private  String earningMin;
+
+ private  String earningMax;
+
+ private String status;
+
+ private String guestName;
+
+ private String contact;
+
+ private String listing;
+
+ private String confirmationCode;
 }
