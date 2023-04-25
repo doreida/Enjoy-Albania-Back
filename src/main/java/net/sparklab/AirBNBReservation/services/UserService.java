@@ -76,7 +76,6 @@ public class UserService{
         return new ResponseEntity<>(user.getToken(),HttpStatus.OK);
     }
 
-
     public ResponseEntity<?> resetPassword(String uuid, ResetpasswordDTO resetpasswordDTO){
         Optional<Users> optionalUser = Optional.ofNullable(userRepository.findByToken(uuid));
         if (!optionalUser.isPresent()){
