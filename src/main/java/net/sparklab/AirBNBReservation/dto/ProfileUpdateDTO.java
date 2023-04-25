@@ -14,5 +14,5 @@ public class ProfileUpdateDTO {
     MultipartFile photo;
     String fileType;
     String fileName;
-     byte[] photobyte;
+    byte[] photobyte;
 }

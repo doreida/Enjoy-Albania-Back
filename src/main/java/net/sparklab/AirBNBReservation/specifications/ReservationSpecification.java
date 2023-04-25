@@ -49,6 +49,10 @@ public class ReservationSpecification implements Specification<Reservation> {
             if (filterDTO.getEndDate()==true) {
                 predicates.add(cb.between(root.get("endDate"), startDateParsed, endDateParsed));
             }
+            if (filterDTO.getStartToEnd()==true){
+                predicates.add(cb.between(root.get("startDate"), startDateParsed, endDateParsed));
+                predicates.add(cb.between(root.get("endDate"), startDateParsed, endDateParsed));
+            }
         }
 
         if (filterDTO.getEarningMin()!=null && filterDTO.getEarningMax()!=null){

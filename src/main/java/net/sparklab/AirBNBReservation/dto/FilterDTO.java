@@ -17,6 +17,8 @@ public class FilterDTO {
     Boolean bookedDate = false;
     Boolean startDate = false;
     Boolean endDate = false;
+    Boolean startToEnd = false;
+
     private String status;
     private String guestName;
     private String contact;

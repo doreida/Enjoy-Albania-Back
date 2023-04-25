@@ -18,9 +18,7 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 
@@ -107,14 +105,20 @@ public class UserService{
 
 
     @Transactional
-    public ResponseEntity<?> updateUser(ProfileUpdateDTO profileUpdateDTO) {
+    public ResponseEntity<Object> updateUser(ProfileUpdateDTO profileUpdateDTO) {
         try {
 
             Users user = userRepository.save(toUser.convert(profileUpdateDTO));
-            return new ResponseEntity<>("User details are updated sucesfully",HttpStatus.OK);
+
+            Map<String, Object> response = new HashMap<String, Object>();
+
+            response.put("photo", user.getPhoto());
+            response.put("fileType", user.getFileType());
+
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>("User details are not updated",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
