@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static java.lang.Boolean.TRUE;
+
 
 @AllArgsConstructor
 @Service
@@ -178,10 +180,19 @@ public class ReservationService {
         reportDTO.setEnd(filterDTO.getEnd());
         reportDTO.setGuestName(filterDTO.getGuestName());
         reportDTO.setStatus(filterDTO.getStatus());
-        reportDTO.setStartdate(filterDTO.getStartDate());
-        reportDTO.setEndate(filterDTO.getEndDate());
-        reportDTO.setBookedDate(filterDTO.getBookedDate());
-        reportDTO.setReservationDate(filterDTO.getStartToEnd());
+        if(filterDTO.getStartDate()==TRUE){
+            reportDTO.setChosendate("Start Date");
+        }
+       else if(filterDTO.getEndDate()==TRUE){
+            reportDTO.setChosendate("End Date");
+        }
+      else if(filterDTO.getBookedDate()==TRUE){
+            reportDTO.setChosendate("Booked Date");
+        }
+       else{
+            reportDTO.setChosendate("Reservation Date");
+        }
+
         return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
 

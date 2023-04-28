@@ -21,6 +21,10 @@ public class FilterDTO {
     private String contact;
     private String listing;
     private String confirmationCode;
+    Boolean createdDate = false;
+    Boolean bookedDate = false;
+    Boolean startDate = false;
+    Boolean endDate = false;
 
 
 }
