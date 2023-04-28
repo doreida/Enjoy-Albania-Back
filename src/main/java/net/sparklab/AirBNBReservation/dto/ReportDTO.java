@@ -36,4 +36,10 @@ public class ReportDTO {
  private String listing;
 
  private String confirmationCode;
+
+ private boolean startdate;
+ private boolean endate;
+ private boolean reservationDate;
+ private boolean bookedDate;
+
 }

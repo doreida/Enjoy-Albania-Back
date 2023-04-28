@@ -178,6 +178,10 @@ public class ReservationService {
         reportDTO.setEnd(filterDTO.getEnd());
         reportDTO.setGuestName(filterDTO.getGuestName());
         reportDTO.setStatus(filterDTO.getStatus());
+        reportDTO.setStartdate(filterDTO.getStartDate());
+        reportDTO.setEndate(filterDTO.getEndDate());
+        reportDTO.setBookedDate(filterDTO.getBookedDate());
+        reportDTO.setReservationDate(filterDTO.getStartToEnd());
         return new ResponseEntity(reportDTO,HttpStatus.OK);
     }
 
