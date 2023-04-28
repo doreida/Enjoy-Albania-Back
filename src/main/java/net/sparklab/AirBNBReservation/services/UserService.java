@@ -136,7 +136,7 @@ public class UserService{
             return new ResponseEntity<>("Your password was changed successfully!", HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<>("Your password is wrong! Please put your correct password",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Your current password is wrong! Please put your correct password",HttpStatus.BAD_REQUEST);
         }
     }
 
