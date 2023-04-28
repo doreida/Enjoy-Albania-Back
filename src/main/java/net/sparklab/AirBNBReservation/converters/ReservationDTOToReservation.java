@@ -121,7 +121,13 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
             String[] nameParts = fullName.split(" ");
 
             String firstName = nameParts[0];
-            String lastName = fullName.replace(firstName+" ","");
+
+            String lastName = fullName.replace(firstName + " ", "");
+            if (firstName.equals(lastName)){
+                lastName="";
+            }
+
+
             Guest guest = guestRepository.findByFirstNameAndLastName(firstName,lastName);
             if (guest==null) {
                 GuestDTO guestDTO = new GuestDTO();

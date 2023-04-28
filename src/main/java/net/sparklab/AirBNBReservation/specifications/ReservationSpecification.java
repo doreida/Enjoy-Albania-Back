@@ -37,9 +37,22 @@ public class ReservationSpecification implements Specification<Reservation> {
             LocalDate startDateParsed = LocalDate.parse(filterDTO.getStart(), DateTimeFormatter.ofPattern("d/M/uuuu"));
             LocalDate endDateParsed = LocalDate.parse(filterDTO.getEnd(), DateTimeFormatter.ofPattern("d/M/uuuu"));
 
-            if (filterDTO.getStartToEnd()){
+            if (filterDTO.getBookedDate()) {
+                predicates.add(cb.between(root.get("bookedDate"), startDateParsed, endDateParsed));
+            }
+            if (filterDTO.getCreatedDate()) {
+                predicates.add(cb.between(root.get("createdDate"), startDateParsed, endDateParsed));
+            }
+            if (filterDTO.getStartDate()) {
                 predicates.add(cb.between(root.get("startDate"), startDateParsed, endDateParsed));
+            }
+            if (filterDTO.getEndDate()) {
                 predicates.add(cb.between(root.get("endDate"), startDateParsed, endDateParsed));
+            }
+
+            if (filterDTO.getStartToEnd()){
+                predicates.add(cb.equal(root.get("startDate"), startDateParsed));
+                predicates.add(cb.equal(root.get("endDate"), endDateParsed));
             }
         }
 
