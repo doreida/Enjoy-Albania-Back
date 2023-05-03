@@ -40,7 +40,13 @@ public class FilterDTOToReservation implements Converter<FilterDTO, Reservation>
                 guest.setFirstName(firstName);
                 guest.setLastName(lastName);
                 if (source.getStatus() != null) {
-                    guest.setStatus(source.getStatus().equals("Past guest") || source.getStatus().equals("Past_Guest")  ? Status.Past_Guest : null);
+                    if (source.getStatus().equals("Past_Guest")) {
+                        guest.setStatus(Status.Past_Guest);
+                    }
+                    if (source.getStatus().equals("New_Guest")) {
+                        guest.setStatus(Status.New_Guest);
+                    }
+
                 }
                 guest.setContact(source.getContact());
 

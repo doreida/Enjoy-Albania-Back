@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import net.sparklab.AirBNBReservation.dto.GuestDTO;
 import net.sparklab.AirBNBReservation.dto.ReservationDTO;
-import net.sparklab.AirBNBReservation.model.Guest;
-import net.sparklab.AirBNBReservation.model.Listing;
-import net.sparklab.AirBNBReservation.model.Reservation;
-import net.sparklab.AirBNBReservation.model.Source;
+import net.sparklab.AirBNBReservation.model.*;
 import net.sparklab.AirBNBReservation.repositories.GuestRepository;
 import net.sparklab.AirBNBReservation.repositories.ListingRepository;
 import net.sparklab.AirBNBReservation.repositories.ReservationRepository;
@@ -134,7 +131,12 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 guestDTO.setFirstname(firstName);
                 guestDTO.setLastname(lastName);
                 if (source.getStatus()!=null) {
-                    guestDTO.setStatus(source.getStatus().equals("Past guest") || source.getStatus().equals("Past_Guest") ? "Past_Guest" : null);
+                    if (source.getStatus().equals("Past_Guest")) {
+                        guest.setStatus(Status.Past_Guest);
+                    }
+                    if (source.getStatus().equals("New_Guest")) {
+                        guest.setStatus(Status.New_Guest);
+                    }
                 }
                 guestDTO.setContact(source.getContact());
                 Guest guest1 = guestDTOtoGuest.convert(guestDTO);
