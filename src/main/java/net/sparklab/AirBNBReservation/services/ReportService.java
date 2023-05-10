@@ -31,8 +31,8 @@ public class ReportService {
 
     public String avgGuests(List<Reservation> reservations) {
 
-       double avg = Math.round(reservations.stream().mapToDouble(Reservation::getNoGuests).average().getAsDouble());
-        return String.format("%,.0f",avg);
+       double avg = reservations.stream().mapToDouble(Reservation::getNoGuests).average().getAsDouble();
+        return String.format("%,.1f",avg);
 
     }
 
