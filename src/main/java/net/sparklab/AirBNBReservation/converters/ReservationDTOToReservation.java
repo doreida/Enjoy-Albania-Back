@@ -132,10 +132,10 @@ public class ReservationDTOToReservation implements Converter<ReservationDTO, Re
                 guestDTO.setLastname(lastName);
                 if (source.getStatus()!=null) {
                     if (source.getStatus().equals("Past_Guest")) {
-                        guest.setStatus(Status.Past_Guest);
+                        guestDTO.setStatus("Past_Guest");
                     }
                     if (source.getStatus().equals("New_Guest")) {
-                        guest.setStatus(Status.New_Guest);
+                        guestDTO.setStatus("New_Guest");
                     }
                 }
                 guestDTO.setContact(source.getContact());
